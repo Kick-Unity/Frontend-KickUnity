@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+        <!-- 상단 바 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#393E46"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내 정보"
+                android:textColor="#FFFFFF"
+                android:textSize="23dp"
+                android:textStyle="bold"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <!-- 프로필 이미지 (클릭하여 편집 가능) -->
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/profile"
+            android:background="@drawable/circle"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"/>
+
+        <!-- 이름 -->
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/profileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이름"
+            android:textSize="25dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="#393E46" />
+
+        <!-- 팀 정보 -->
+        <TextView
+            android:id="@+id/teamInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="팀 정보"
+            android:textSize="16dp"
+            android:layout_marginTop="15dp"
+            android:textColor="#686A8A"
+            android:gravity="left" />
+
+        <!-- 전화번호 -->
+        <TextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="전화번호: 010-1234-5678"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#686A8A" />
+
+        <!-- 성별 -->
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="성별: 남성"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#686A8A" />
+
+        <!-- 생년월일 -->
+        <TextView
+            android:id="@+id/birthdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="생년월일: 1990-01-01"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#686A8A" />
+
+        <!-- 이메일 -->
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="이메일: example@example.com"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#686A8A" />
+
+        <!-- 내정보 편집 버튼 -->
+        <Button
+            android:id="@+id/editProfileButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="내정보 편집"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_radius"
+            android:textColor="#FFFFFF"/>
+
+        <!-- 로그아웃 버튼 -->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="로그아웃"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_radius"
+            android:textColor="#FFFFFF"/>
+
+        <!-- 회원탈퇴 버튼 -->
+        <Button
+            android:id="@+id/deleteAccountButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="회원탈퇴"
+            android:textColor="#F6695E"
+            android:background="@drawable/button_radius"
+            android:backgroundTint="#FEECEB"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp" />
+
+</LinearLayout>

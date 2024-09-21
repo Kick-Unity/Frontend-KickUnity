@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/certified"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인증 중 ..."
+        android:textStyle="bold"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="100dp"
+        android:textColor="#393E46"
+        android:textSize="40dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="당신의 이메일로 보낸 6 자리 코드를"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#393E46"
+        android:textSize="15dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="입력해 주세요"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#393E46"
+        android:textSize="15dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/sign_certNum_1"
+            android:gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="20dp"
+            android:nextFocusRight="@+id/sign_certNum_2" />
+
+        <EditText
+            android:id="@+id/sign_certNum_2"
+            android:gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="20dp"
+            android:nextFocusRight="@+id/sign_certNum_3" />
+
+        <EditText
+            android:id="@+id/sign_certNum_3"
+            android:gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="20dp"
+            android:nextFocusRight="@+id/sign_certNum_4" />
+
+        <EditText
+            android:id="@+id/sign_certNum_4"
+            android:gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="20dp"
+            android:nextFocusRight="@+id/sign_certNum_5" />
+
+        <EditText
+            android:id="@+id/sign_certNum_5"
+            android:gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="20dp"
+            android:nextFocusRight="@+id/sign_certNum_6" />
+
+        <EditText
+            android:id="@+id/sign_certNum_6"
+            android:gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="50dp">
+        <Button
+            android:id="@+id/authCodeChecked_Button"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/button_radius"
+            android:text="인증번호 확인"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="30dp">
+        <Button
+            android:id="@+id/resendAuthCode_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="코드를 받지 못했습니까?   다시 보내기"
+            android:textColor="#393E46"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

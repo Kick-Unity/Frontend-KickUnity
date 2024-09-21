@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.KickUnity" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+    <style name="Theme.KickUnity" parent="Base.Theme.KickUnity" />
+
+    <style name="ShapeAppearanceOverlay.MyCustomShape" parent="">
+        <item name="cornerFamily">rounded</item> <!-- 모서리 둥글게 -->
+        <item name="cornerSize">16dp</item> <!-- 둥글기의 정도 -->
+    </style>
+    
+</resources>
