@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
         View divider = new View(getContext());
         LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 2); // 높이 2px의 구분선
-        dividerParams.setMargins(0, 32, 0, 32); // 구분선의 위아래 여백을 더 크게 설정 (32dp)
+        dividerParams.setMargins(0, 25, 0, 25); // 구분선의 위아래 여백을 더 크게 설정 (32dp)
         divider.setLayoutParams(dividerParams);
         divider.setBackgroundColor(Color.LTGRAY); // 구분선 색상 설정
 
