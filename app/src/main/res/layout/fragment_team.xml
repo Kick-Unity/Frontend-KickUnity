@@ -1,40 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/teamtopBar"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:background="#393E46">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="#FFFFFF"
-                android:textSize="23dp"
-                android:textStyle="bold"
-                android:text="팀 정보" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:background="@drawable/circle"
-        android:id="@+id/TeamProfile"
-        android:padding="5dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="#393E46"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_gravity="center"
-        android:src="@drawable/profile"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="팀 정보"
+        android:textColor="#FFFFFF"
+        android:textSize="23dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/teamtopBar"
+        app:layout_constraintBottom_toBottomOf="@id/teamtopBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 프로필 이미지 (클릭하여 편집 가능) -->
+    <ImageView
+        android:id="@+id/teamprofileImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/profile"
+        android:background="@drawable/circle"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/teamtopBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 팀 이름 -->
+    <TextView
+        android:id="@+id/teamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="팀 이름"
+        android:textSize="25dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textColor="#393E46"
+        app:layout_constraintTop_toBottomOf="@+id/teamprofileImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 팀 창단년도 -->
+    <TextView
+        android:id="@+id/foundingYearLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp"
+        android:text="팀 창단년도  :  "
+        android:textSize="16dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/teamName"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <EditText
+        android:id="@+id/editTextFoundingYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="25dp"
+        android:hint="연도 입력"
+        android:textSize="16dp"
+        android:textColor="#393E46"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/teamName"
+        app:layout_constraintStart_toEndOf="@+id/foundingYearLabel"/>
+
+    <!-- 활동 지역 -->
+    <TextView
+        android:id="@+id/activityRegionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="팀 활동 지역  :  "
+        android:textSize="16dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/foundingYearLabel"
+        app:layout_constraintStart_toStartOf="@+id/foundingYearLabel" />
+    <EditText
+        android:id="@+id/editTextActivityRegion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:hint="지역 입력"
+        android:textSize="16dp"
+        android:textColor="#393E46"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/foundingYearLabel"
+        app:layout_constraintStart_toEndOf="@+id/activityRegionLabel"/>
+
+    <!-- 연령대 -->
+    <TextView
+        android:id="@+id/ageGroupLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="연령대  :  "
+        android:textSize="16dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/activityRegionLabel"
+        app:layout_constraintStart_toStartOf="@+id/activityRegionLabel" />
+    <EditText
+        android:id="@+id/editTextAgeGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:hint="연령대 입력"
+        android:textSize="16dp"
+        android:textColor="#393E46"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/activityRegionLabel"
+        app:layout_constraintStart_toEndOf="@+id/ageGroupLabel"/>
 
 
-</LinearLayout>
+    <!-- 팀 인원 -->
+    <TextView
+        android:id="@+id/teamMembersLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="팀 인원  :  "
+        android:textColor="#000000"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/ageGroupLabel"
+        app:layout_constraintStart_toStartOf="@+id/ageGroupLabel" />
+    <EditText
+        android:id="@+id/editTextTeamMembers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:hint="인원 수 입력"
+        android:textSize="16dp"
+        android:textColor="#393E46"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/ageGroupLabel"
+        app:layout_constraintStart_toEndOf="@+id/teamMembersLabel"/>
+
+    <!-- 클럽 소개 -->
+    <TextView
+        android:id="@+id/clubIntroductionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="클럽 소개"
+        android:textSize="16dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/teamMembersLabel"
+        app:layout_constraintStart_toStartOf="@+id/teamMembersLabel" />
+    <ScrollView
+        android:id="@+id/teamscrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/clubIntroductionLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/editTextClubDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="클럽에 대한 소개를 입력하세요"
+            android:inputType="textMultiLine"
+            android:background="@android:color/transparent"
+            android:textSize="16dp"
+            android:textColor="#393E46"
+            android:padding="25dp"
+            android:scrollbars="vertical"
+            android:maxLines="5" /> <!-- 최대 라인 수를 설정하여 보기 좋게 조정 -->
+    </ScrollView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

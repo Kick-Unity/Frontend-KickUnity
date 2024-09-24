@@ -14,7 +14,75 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_option_1"
+            android:layout_width="130dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="690dp"
+            android:layout_marginStart="80dp"
+            app:cardBackgroundColor="#EEEEEE"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="팀 만들기"
+                android:padding="8dp"
+                android:textColor="#00ADB5"
+                android:textStyle="bold"
+                android:gravity="center"
+            android:layout_gravity="center" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_option_2"
+            android:layout_width="130dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="750dp"
+            android:layout_marginStart="80dp"
+            app:cardBackgroundColor="#EEEEEE"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="팀 검색하기"
+                android:padding="8dp"
+                android:textColor="#00ADB5"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center" />
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+    <!-- BottomNavigationView: 화면 하단 고정 -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#393E46"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/main_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="#9A9BB1"
+        app:itemTextColor="#9A9BB1" >
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="125dp"
+            app:srcCompat="@drawable/ic_close"
+            android:backgroundTint="#EEEEEE" />
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <!-- FloatingActionButton: 하단 우측에 위치 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,16 +95,6 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- BottomNavigationView: 화면 하단 고정 -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#393E46"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/main_bottom_nav"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="#9A9BB1"
-        app:itemTextColor="#9A9BB1" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

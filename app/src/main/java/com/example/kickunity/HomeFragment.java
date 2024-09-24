@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
         // 시간 TextView
         TextView postTime = new TextView(getContext());
         postTime.setText(time); // 전달받은 시간 사용
-        postTime.setTextColor(Color.parseColor("#1867FF")); // 파랑색
+        postTime.setTextColor(Color.parseColor("#1867FF")); // 파란색
         postTime.setBackgroundColor(Color.TRANSPARENT); // 배경을 투명하게
         postTime.setPadding(8, 0, 30, 0); // 여백 조정
         postTime.setTextSize(18); // 글자 크기 설정
@@ -75,7 +75,21 @@ public class HomeFragment extends Fragment {
         timeTitleLayout.addView(postTime);
         timeTitleLayout.addView(postTitle);
 
+        // postLayout에 시간과 제목 레이아웃 추가
         postLayout.addView(timeTitleLayout);
+
+        // 카테고리 TextView 추가
+        TextView postCategory = new TextView(getContext());
+        postCategory.setText(category); // 전달받은 카테고리 사용
+        postCategory.setTextSize(16); // 카테고리의 글자 크기
+        postCategory.setTextColor(Color.GRAY); // 카테고리는 회색으로 설정
+        postCategory.setPadding(10, 8, 0, 0); // 위쪽 여백을 추가
+        postCategory.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        // 카테고리를 제목 아래에 추가
+        postLayout.addView(postCategory);
 
         // 구분선 추가
         View divider = new View(getContext());
@@ -91,4 +105,5 @@ public class HomeFragment extends Fragment {
         // 구분선 추가
         postContainer.addView(divider);
     }
+
 }

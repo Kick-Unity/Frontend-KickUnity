@@ -29,6 +29,9 @@
         <!-- 글쓰기 액티비티 -->
         <activity android:name=".WriteActivity" />
 
+        <!-- 팀 만들기 액티비티 -->
+        <activity android:name=".CreateTeamActivity"></activity>
+
     </application>
 
 </manifest>
