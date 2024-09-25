@@ -81,22 +81,18 @@ public class MainActivity extends AppCompatActivity {
             hideFabMain(); // fab_main 클릭 시 플로팅 버튼 숨기기
         });
 
-        cardOption1.setOnClickListener(view -> {
-            // 카드 옵션 1 클릭 시 행동
-            // 여기에 원하는 기능 추가
-        });
-        // cardOption1 클릭 시 행동
+        // 카드 옵션 클릭 리스너 설정
         cardOption1.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, CreateTeamActivity.class);
             startActivity(intent); // CreateTeamActivity 열기
         });
 
-
         cardOption2.setOnClickListener(view -> {
-            // 카드 옵션 2 클릭 시 행동
-            // 여기에 원하는 기능 추가
+            Intent intent = new Intent(MainActivity.this, SearchTeamActivity.class);
+            startActivity(intent); // SearchTeamActivity 열기
         });
     }
+
 
     private void showFabMain() {
         fabMain.show();

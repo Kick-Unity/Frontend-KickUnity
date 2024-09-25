@@ -87,7 +87,6 @@ public class WriteActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-
         Button submitButton = findViewById(R.id.submitButton);
         submitButton.setOnClickListener(v -> {
             Intent resultIntent = new Intent();

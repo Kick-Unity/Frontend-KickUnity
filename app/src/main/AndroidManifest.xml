@@ -32,6 +32,9 @@
         <!-- 팀 만들기 액티비티 -->
         <activity android:name=".CreateTeamActivity"></activity>
 
+        <!-- 팀 검색 액티비티 -->
+        <activity android:name=".SearchTeamActivity"></activity>
+
     </application>
 
 </manifest>

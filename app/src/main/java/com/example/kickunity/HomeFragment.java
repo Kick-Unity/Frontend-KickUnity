@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 public class HomeFragment extends Fragment {
 
     private PostViewModel postViewModel;
-    private LinearLayout postContainer;
+    private LinearLayout home_scrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        postContainer = view.findViewById(R.id.postContainer);
+        home_scrollView = view.findViewById(R.id.home_scrollView);
 
         postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
         postViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
-            postContainer.removeAllViews(); // 기존 게시글 제거
+            home_scrollView.removeAllViews(); // 기존 게시글 제거
             for (PostViewModel.Post post : posts) {
                 addPostView(post.title, post.content, post.category, post.time); // 시간 정보 추가
             }
@@ -100,10 +100,10 @@ public class HomeFragment extends Fragment {
         divider.setBackgroundColor(Color.LTGRAY); // 구분선 색상 설정
 
         // postLayout을 postContainer에 추가
-        postContainer.addView(postLayout);
+        home_scrollView.addView(postLayout);
 
         // 구분선 추가
-        postContainer.addView(divider);
+        home_scrollView.addView(divider);
     }
 
 }
