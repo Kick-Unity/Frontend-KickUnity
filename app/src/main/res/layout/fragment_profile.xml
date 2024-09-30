@@ -72,11 +72,11 @@
 
         <!-- 전화번호 -->
         <TextView
-            android:id="@+id/phoneNumber"
+            android:id="@+id/activityField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="전화번호  :  "
+            android:text="활동 종목  :  "
             android:textSize="16dp"
             android:textColor="#000000"
             app:layout_constraintTop_toBottomOf="@+id/teamInfo"
@@ -91,8 +91,8 @@
             android:text="성별  :  "
             android:textSize="16dp"
             android:textColor="#000000"
-            app:layout_constraintTop_toBottomOf="@+id/phoneNumber"
-            app:layout_constraintStart_toStartOf="@+id/phoneNumber" />
+            app:layout_constraintTop_toBottomOf="@+id/activityField"
+            app:layout_constraintStart_toStartOf="@+id/activityField" />
 
         <!-- 생년월일 -->
         <TextView

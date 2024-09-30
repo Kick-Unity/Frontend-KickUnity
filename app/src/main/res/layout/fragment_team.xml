@@ -57,18 +57,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- 팀 종목 -->
+    <TextView
+        android:id="@+id/teamActivityField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp"
+        android:text="팀 종목  :  "
+        android:textSize="16dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/teamName"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <EditText
+        android:id="@+id/editTextTeamActivityField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="25dp"
+        android:hint="종목 입력"
+        android:textSize="16dp"
+        android:textColor="#393E46"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/teamName"
+        app:layout_constraintStart_toEndOf="@+id/teamActivityField"/>
+
     <!-- 팀 창단년도 -->
     <TextView
         android:id="@+id/foundingYearLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp"
         android:text="팀 창단년도  :  "
         android:textSize="16dp"
         android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@+id/teamName"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/teamActivityField"
+        app:layout_constraintStart_toStartOf="@+id/teamActivityField"/>
     <EditText
         android:id="@+id/editTextFoundingYear"
         android:layout_width="0dp"
@@ -79,7 +103,7 @@
         android:textSize="16dp"
         android:textColor="#393E46"
         android:background="@android:color/transparent"
-        app:layout_constraintTop_toBottomOf="@+id/teamName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTeamActivityField"
         app:layout_constraintStart_toEndOf="@+id/foundingYearLabel"/>
 
     <!-- 활동 지역 -->

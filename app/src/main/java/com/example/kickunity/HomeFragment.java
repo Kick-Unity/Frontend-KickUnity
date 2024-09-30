@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment {
         // postLayout에 시간과 제목 레이아웃 추가
         postLayout.addView(timeTitleLayout);
 
+/*
         // 카테고리 TextView 추가
         TextView postCategory = new TextView(getContext());
         postCategory.setText(category); // 전달받은 카테고리 사용
@@ -90,6 +91,7 @@ public class HomeFragment extends Fragment {
 
         // 카테고리를 제목 아래에 추가
         postLayout.addView(postCategory);
+*/
 
         // 구분선 추가
         View divider = new View(getContext());

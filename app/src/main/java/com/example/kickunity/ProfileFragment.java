@@ -32,7 +32,7 @@ public class ProfileFragment extends Fragment {
         profileImageView = view.findViewById(R.id.profileImage);
         profileName = view.findViewById(R.id.profileName);
         teamInfo = view.findViewById(R.id.teamInfo);
-        phoneNumber = view.findViewById(R.id.phoneNumber);
+        phoneNumber = view.findViewById(R.id.activityField);
         gender = view.findViewById(R.id.gender);
         birthdate = view.findViewById(R.id.birthdate);
         email = view.findViewById(R.id.email);

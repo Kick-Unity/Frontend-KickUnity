@@ -10,6 +10,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,10 +26,40 @@ public class MainActivity extends AppCompatActivity {
     private static final int WRITE_REQUEST_CODE = 1;
     private PostViewModel postViewModel;
 
+    CheckBox checkBoxTerms = findViewById(R.id.checkBoxTerms);
+    CheckBox checkBoxPrivacy = findViewById(R.id.checkBoxPrivacy);
+    Button buttonSignUp = findViewById(R.id.buttonSignUp);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 로그인 버튼 클릭 시
+
+        // 비밀번호 찾기 버튼 클릭 시
+
+        /* sign_in.xml에서 회원가입 버튼 클릭시
+        1. 필수 약관이 체크되었을 때만 버튼을 활성화
+        checkBoxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            buttonSignUp.setEnabled(checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked());
+        });
+
+        checkBoxPrivacy.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            buttonSignUp.setEnabled(checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked());
+        });
+
+        2. 이메일 인증번호 받기 버튼 클릭 시
+        buttonSignUp.setOnClickListener(v -> {
+            if (checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked()) {
+                // 회원가입 절차 실행
+                Toast.makeText(this, "인증 번호를 발송하였습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "필수 약관에 동의해야 합니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        */
 
         fab = findViewById(R.id.fab);
         fabMain = findViewById(R.id.fab_main);
