@@ -5,55 +5,225 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-
     <TextView
-        android:id="@+id/kcikunityText"
+        android:id="@+id/home_kickunityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="KICKUNITY"
-        android:textSize="25sp"
+        android:textSize="25dp"
         android:fontFamily="monospace"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/bell"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="55dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/searchimage"
+        android:layout_marginRight="55dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <EditText
-        android:layout_width="320dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/search"
-        android:drawableStart="@drawable/searchimage"
-        android:drawablePadding="10dp"
-        android:hint="search"
-        android:paddingLeft="10dp"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@+id/kcikunityText"
+    <!-- 공지사항 공간 -->
+    <ScrollView
+        android:id="@+id/noticeScrollView"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/home_kickunityText"
+        app:layout_constraintStart_toStartOf="parent" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/noticeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="공지사항"
+                android:textSize="20sp"
+                android:textColor="#FF4081"
+                android:layout_marginBottom="8dp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/noticeContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기에 공지사항 내용이 표시됩니다.  예: 다음 주 토요일에 이벤트가 있습니다."
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:background="#f9f9f9"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/noticeContent2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기에 공지사항 내용이 표시됩니다.  예: 다음 주 토요일에 이벤트가 있습니다."
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:background="#f9f9f9"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/noticeContent3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기에 공지사항 내용이 표시됩니다.  예: 다음 주 토요일에 이벤트가 있습니다."
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:background="#f9f9f9"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/noticeContent4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기에 공지사항 내용이 표시됩니다.  예: 다음 주 토요일에 이벤트가 있습니다."
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:background="#f9f9f9"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/noticeContent5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기에 공지사항 내용이 표시됩니다.  예: 다음 주 토요일에 이벤트가 있습니다."
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:background="#f9f9f9"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/noticeContent6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기에 공지사항 내용이 표시됩니다.  예: 다음 주 토요일에 이벤트가 있습니다."
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:background="#f9f9f9"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/noticeContent7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기에 공지사항 내용이 표시됩니다.  예: 다음 주 토요일에 이벤트가 있습니다."
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:background="#f9f9f9"
+                android:layout_marginBottom="16dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/hr1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="#393E46"
+        app:layout_constraintTop_toBottomOf="@+id/noticeScrollView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
-    <ScrollView
+    <Button
+        android:id="@+id/mainboard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="140dp">
-        <LinearLayout
-            android:id="@+id/home_scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center_vertical"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/hr1"
+        android:text="전체 게시판"
+        android:textColor="#393E46"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
+    <Button
+        android:id="@+id/soccerBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center_vertical"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/mainboard"
+        android:text="축구 게시판"
+        android:textColor="#393E46"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+    <Button
+        android:id="@+id/basketballBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center_vertical"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/soccerBoard"
+        android:text="농구 게시판"
+        android:textColor="#393E46"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+    <Button
+        android:id="@+id/baseballBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center_vertical"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/basketballBoard"
+        android:text="야구 게시판"
+        android:textColor="#393E46"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+    <Button
+        android:id="@+id/otherSportsBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center_vertical"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/baseballBoard"
+        android:text="기타 종목 게시판"
+        android:textColor="#393E46"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+    <View
+        android:id="@+id/hr2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#393E46"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/otherSportsBoard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/myPostContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center_vertical"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/hr2"
+        android:text="내가 쓴 글"
+        android:textColor="#393E46"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,10 +26,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int WRITE_REQUEST_CODE = 1;
     private PostViewModel postViewModel;
 
+    /*
     CheckBox checkBoxTerms = findViewById(R.id.checkBoxTerms);
     CheckBox checkBoxPrivacy = findViewById(R.id.checkBoxPrivacy);
     Button buttonSignUp = findViewById(R.id.buttonSignUp);
-
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +38,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 로그인 버튼 클릭 시
-
         // 비밀번호 찾기 버튼 클릭 시
-
         /* sign_in.xml에서 회원가입 버튼 클릭시
         1. 필수 약관이 체크되었을 때만 버튼을 활성화
         checkBoxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
             buttonSignUp.setEnabled(checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked());
         });
-
         checkBoxPrivacy.setOnCheckedChangeListener((buttonView, isChecked) -> {
             buttonSignUp.setEnabled(checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked());
         });
-
         2. 이메일 인증번호 받기 버튼 클릭 시
         buttonSignUp.setOnClickListener(v -> {
             if (checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked()) {
@@ -74,8 +71,9 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, WRITE_REQUEST_CODE);
         });
 
+        /*
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        loadFragment(new HomeFragment()); // HomeFragment를 기본으로 로드
+        loadFragment(new MainBoardFragment()); // MainBoardFragment를 기본으로 로드
 
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_home) {
-                selectedFragment = new HomeFragment();
+                selectedFragment = new MainBoardFragment();
                 fab.show();
                 hideCardOptions(); // 카드 뷰 숨기기
                 fabMain.hide(); // nav_home 선택 시 플로팅 버튼 숨기기
@@ -109,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+        */
 
         fabMain.setOnClickListener(view -> {
             hideFabMain(); // fab_main 클릭 시 플로팅 버튼 숨기기
@@ -164,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -176,4 +176,5 @@ public class MainActivity extends AppCompatActivity {
             postViewModel.addPost(title, content, category, time);
         }
     }
+     */
 }

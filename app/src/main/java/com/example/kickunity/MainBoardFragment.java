@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-public class HomeFragment extends Fragment {
+public class MainBoardFragment extends Fragment {
 
     private PostViewModel postViewModel;
     private LinearLayout home_scrollView;
@@ -19,7 +19,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_mainboard, container, false);
         home_scrollView = view.findViewById(R.id.home_scrollView);
 
         postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
@@ -88,7 +88,6 @@ public class HomeFragment extends Fragment {
         postCategory.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
-
         // 카테고리를 제목 아래에 추가
         postLayout.addView(postCategory);
 */
