@@ -6,27 +6,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-public class MainBoardFragment extends Fragment {
+public class BaseballBoardFragment extends Fragment {
 
     private PostViewModel postViewModel;
-    private LinearLayout home_scrollView;
+    private LinearLayout baseballBoard_scrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mainboard, container, false);
-        home_scrollView = view.findViewById(R.id.home_scrollView);
+        View view = inflater.inflate(R.layout.fragment_baseballboard, container, false);
+        baseballBoard_scrollView = view.findViewById(R.id.baseballBoard_scrollView);
 
         postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
         postViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
-            home_scrollView.removeAllViews(); // 기존 게시글 제거
+            baseballBoard_scrollView.removeAllViews(); // 기존 게시글 제거
             for (PostViewModel.Post post : posts) {
-                addPostView(post.title, post.content, post.category, post.time); // 시간 정보 추가
+                if (post.category.equals("야구 게시판")) {  // 야구 게시판 카테고리 필터
+                    addPostView(post.title, post.content, post.category, post.time);
+                }
             }
         });
 
@@ -36,12 +38,12 @@ public class MainBoardFragment extends Fragment {
     private void addPostView(String title, String content, String category, String time) {
         LinearLayout postLayout = new LinearLayout(getContext());
         postLayout.setOrientation(LinearLayout.VERTICAL);
-        postLayout.setPadding(32, 32, 32, 32); // 패딩을 크게 설정하여 공간을 많이 차지하게 함
+        postLayout.setPadding(32, 32, 32, 32); // 패딩 설정
         postLayout.setBackgroundResource(R.drawable.post_background);
         postLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
-        postLayout.setElevation(4); // 그림자 효과 추가
+        postLayout.setElevation(4);
 
         // 시간과 제목을 위한 레이아웃
         LinearLayout timeTitleLayout = new LinearLayout(getContext());
@@ -52,15 +54,12 @@ public class MainBoardFragment extends Fragment {
 
         // 시간 TextView
         TextView postTime = new TextView(getContext());
-        postTime.setText(time); // 전달받은 시간 사용
-        postTime.setTextColor(Color.parseColor("#1867FF")); // 파란색
-        postTime.setBackgroundColor(Color.TRANSPARENT); // 배경을 투명하게
-        postTime.setPadding(8, 0, 30, 0); // 여백 조정
-        postTime.setTextSize(18); // 글자 크기 설정
+        postTime.setText(time);
+        postTime.setTextColor(Color.parseColor("#1867FF"));
+        postTime.setBackgroundColor(Color.TRANSPARENT);
+        postTime.setPadding(8, 0, 30, 0);
+        postTime.setTextSize(18);
         postTime.setTypeface(null, Typeface.BOLD);
-        postTime.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
 
         // 제목 TextView
         TextView postTitle = new TextView(getContext());
@@ -69,7 +68,7 @@ public class MainBoardFragment extends Fragment {
         postTitle.setTextColor(Color.BLACK);
         postTitle.setLayoutParams(new LinearLayout.LayoutParams(
                 0,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1)); // 제목이 나머지 공간을 차지하도록 설정
+                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
         // 시간과 제목을 수평으로 나란히 배치
         timeTitleLayout.addView(postTime);
@@ -78,33 +77,16 @@ public class MainBoardFragment extends Fragment {
         // postLayout에 시간과 제목 레이아웃 추가
         postLayout.addView(timeTitleLayout);
 
-/*
-        // 카테고리 TextView 추가
-        TextView postCategory = new TextView(getContext());
-        postCategory.setText(category); // 전달받은 카테고리 사용
-        postCategory.setTextSize(16); // 카테고리의 글자 크기
-        postCategory.setTextColor(Color.GRAY); // 카테고리는 회색으로 설정
-        postCategory.setPadding(10, 8, 0, 0); // 위쪽 여백을 추가
-        postCategory.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        // 카테고리를 제목 아래에 추가
-        postLayout.addView(postCategory);
-*/
-
         // 구분선 추가
         View divider = new View(getContext());
         LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 2); // 높이 2px의 구분선
-        dividerParams.setMargins(0, 25, 0, 25); // 구분선의 위아래 여백을 더 크게 설정 (32dp)
+                LinearLayout.LayoutParams.MATCH_PARENT, 2);
+        dividerParams.setMargins(0, 25, 0, 25);
         divider.setLayoutParams(dividerParams);
-        divider.setBackgroundColor(Color.LTGRAY); // 구분선 색상 설정
+        divider.setBackgroundColor(Color.LTGRAY);
 
-        // postLayout을 postContainer에 추가
-        home_scrollView.addView(postLayout);
-
-        // 구분선 추가
-        home_scrollView.addView(divider);
+        // postLayout을 home_scrollView에 추가
+        baseballBoard_scrollView.addView(postLayout);
+        baseballBoard_scrollView.addView(divider);
     }
-
 }

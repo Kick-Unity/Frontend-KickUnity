@@ -32,7 +32,7 @@ public class WriteActivity extends AppCompatActivity {
         categorySpinner = findViewById(R.id.categorySpinner);
 
         // 카테고리 설정
-        String[] categories = {"자유 게시판", "축구 게시판", "농구 게시판", "러닝 게시판"};
+        String[] categories = {"전체 게시판", "축구 게시판", "농구 게시판", "야구 게시판", "기타 스포츠 게시판"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);

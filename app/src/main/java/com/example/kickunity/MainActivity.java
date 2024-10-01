@@ -71,9 +71,8 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, WRITE_REQUEST_CODE);
         });
 
-        /*
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        loadFragment(new MainBoardFragment()); // MainBoardFragment를 기본으로 로드
+        loadFragment(new HomeFragment()); // HomeFragment를 기본으로 로드
 
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_home) {
-                selectedFragment = new MainBoardFragment();
+                selectedFragment = new HomeFragment();
                 fab.show();
                 hideCardOptions(); // 카드 뷰 숨기기
                 fabMain.hide(); // nav_home 선택 시 플로팅 버튼 숨기기
@@ -107,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        */
+
 
         fabMain.setOnClickListener(view -> {
             hideFabMain(); // fab_main 클릭 시 플로팅 버튼 숨기기
@@ -163,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    /*
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -176,5 +175,5 @@ public class MainActivity extends AppCompatActivity {
             postViewModel.addPost(title, content, category, time);
         }
     }
-     */
+
 }
