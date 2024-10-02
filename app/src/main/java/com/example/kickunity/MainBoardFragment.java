@@ -22,6 +22,13 @@ public class MainBoardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mainboard, container, false);
         home_scrollView = view.findViewById(R.id.home_scrollView);
 
+        // 뒤로 가기 버튼 설정
+        ImageButton backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            // Fragment 종료
+            requireActivity().getSupportFragmentManager().popBackStack();
+        });
+
         postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
         postViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
             home_scrollView.removeAllViews(); // 기존 게시글 제거

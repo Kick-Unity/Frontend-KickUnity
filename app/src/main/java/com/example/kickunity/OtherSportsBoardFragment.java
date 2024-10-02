@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,13 @@ public class OtherSportsBoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_othersportsboard, container, false);
         othersportsBoard_scrollView = view.findViewById(R.id.othersportsBoard_scrollView);
+
+        // 뒤로 가기 버튼 설정
+        ImageButton backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            // Fragment 종료
+            requireActivity().getSupportFragmentManager().popBackStack();
+        });
 
         postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
         postViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {

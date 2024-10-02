@@ -102,6 +102,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // 내가 쓴 글로 이동하는 코드 추가
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                WrittenPostFragment writtenpostFragment = new WrittenPostFragment();
+                transaction.replace(R.id.frame_container, writtenpostFragment); // fragment_container는 프래그먼트가 표시될 레이아웃 ID입니다.
+                transaction.addToBackStack(null); // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아가기 위함
+                transaction.commit();
             }
         });
 
