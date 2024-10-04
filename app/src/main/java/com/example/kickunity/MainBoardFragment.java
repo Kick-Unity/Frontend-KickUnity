@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class MainBoardFragment extends Fragment {
 
     private PostViewModel postViewModel;
@@ -37,6 +39,10 @@ public class MainBoardFragment extends Fragment {
             }
         });
 
+        // fab 다시 보이기
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.show();
+
         return view;
     }
 
@@ -60,7 +66,7 @@ public class MainBoardFragment extends Fragment {
         // 시간 TextView
         TextView postTime = new TextView(getContext());
         postTime.setText(time); // 전달받은 시간 사용
-        postTime.setTextColor(Color.parseColor("#1867FF")); // 파란색
+        postTime.setTextColor(Color.parseColor("#00ADB5"));
         postTime.setBackgroundColor(Color.TRANSPARENT); // 배경을 투명하게
         postTime.setPadding(8, 0, 30, 0); // 여백 조정
         postTime.setTextSize(18); // 글자 크기 설정
@@ -85,19 +91,22 @@ public class MainBoardFragment extends Fragment {
         // postLayout에 시간과 제목 레이아웃 추가
         postLayout.addView(timeTitleLayout);
 
-/*
-        // 카테고리 TextView 추가
-        TextView postCategory = new TextView(getContext());
-        postCategory.setText(category); // 전달받은 카테고리 사용
-        postCategory.setTextSize(16); // 카테고리의 글자 크기
-        postCategory.setTextColor(Color.GRAY); // 카테고리는 회색으로 설정
-        postCategory.setPadding(10, 8, 0, 0); // 위쪽 여백을 추가
-        postCategory.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        // 카테고리를 제목 아래에 추가
-        postLayout.addView(postCategory);
-*/
+        // 터치 이벤트 추가
+        postLayout.setOnClickListener(v -> {
+            // PostDetailFragment로 이동하면서 해당 게시글의 정보를 전달
+            Fragment postDetailFragment = new PostDetailFragment();
+            Bundle args = new Bundle();
+            args.putString("title", title);
+            args.putString("content", content);
+            args.putString("category", category);
+            args.putString("time", time);
+            postDetailFragment.setArguments(args);
+
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_container, postDetailFragment) // frame_container는 PostDetailFragment가 들어갈 컨테이너의 ID입니다.
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         // 구분선 추가
         View divider = new View(getContext());
@@ -113,5 +122,6 @@ public class MainBoardFragment extends Fragment {
         // 구분선 추가
         home_scrollView.addView(divider);
     }
+
 
 }

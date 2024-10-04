@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class WrittenPostFragment extends Fragment {
 
     private PostViewModel postViewModel;
@@ -38,6 +40,10 @@ public class WrittenPostFragment extends Fragment {
             }
         });
 
+        // fab 다시 보이기
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.hide();
+
         return view;
     }
 
@@ -59,7 +65,7 @@ public class WrittenPostFragment extends Fragment {
 
         TextView postTime = new TextView(getContext());
         postTime.setText(time);
-        postTime.setTextColor(Color.parseColor("#1867FF"));
+        postTime.setTextColor(Color.parseColor("#00ADB5"));
         postTime.setBackgroundColor(Color.TRANSPARENT);
         postTime.setPadding(8, 0, 30, 0);
         postTime.setTextSize(18);
@@ -73,11 +79,32 @@ public class WrittenPostFragment extends Fragment {
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
+        // 시간과 제목을 수평으로 나란히 배치
         timeTitleLayout.addView(postTime);
         timeTitleLayout.addView(postTitle);
 
+        // postLayout에 시간과 제목 레이아웃 추가
         postLayout.addView(timeTitleLayout);
 
+        // 터치 이벤트 추가
+        postLayout.setOnClickListener(v -> {
+            // PostDetailFragment로 이동하면서 해당 게시글의 정보를 전달
+            Fragment postDetailFragment = new PostDetailFragment();
+            Bundle args = new Bundle();
+            args.putString("title", title);
+            args.putString("content", content);
+            args.putString("category", category);
+            args.putString("time", time);
+            postDetailFragment.setArguments(args);
+
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_container, postDetailFragment) // frame_container는 PostDetailFragment가 들어갈 컨테이너의 ID입니다.
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+
+        // 구분선 추가
         View divider = new View(getContext());
         LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 2);

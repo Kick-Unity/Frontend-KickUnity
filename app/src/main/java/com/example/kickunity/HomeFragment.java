@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class HomeFragment extends Fragment {
 
     private TextView noticeContent;
@@ -109,6 +111,10 @@ public class HomeFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+        // fab 다시 보이기
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.show();
 
         return view;
     }
