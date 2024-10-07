@@ -19,6 +19,8 @@ public class PostDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_detail, container, false);
 
+
+
         // 뒤로 가기 버튼 설정
         ImageButton backButton = view.findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
