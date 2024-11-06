@@ -106,30 +106,6 @@
             app:layout_constraintStart_toEndOf="@+id/activityField"/>
 
 
-        <!-- 성별 -->
-        <TextView
-            android:id="@+id/gender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="성별  :  "
-            android:textSize="16dp"
-            android:textColor="#000000"
-            app:layout_constraintTop_toBottomOf="@+id/activityField"
-            app:layout_constraintStart_toStartOf="@+id/activityField" />
-        <EditText
-            android:id="@+id/editTextgender"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="25dp"
-            android:hint="성별 입력"
-            android:textSize="16dp"
-            android:textColor="#393E46"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@+id/activityField"
-            app:layout_constraintStart_toEndOf="@+id/gender"/>
-
         <!-- 생년월일 -->
         <TextView
             android:id="@+id/birthdate"
@@ -139,8 +115,8 @@
             android:text="생년월일  :  "
             android:textColor="#000000"
             android:textSize="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/gender"
-            app:layout_constraintStart_toStartOf="@+id/gender" />
+            app:layout_constraintTop_toBottomOf="@+id/activityField"
+            app:layout_constraintStart_toStartOf="@+id/activityField" />
         <EditText
             android:id="@+id/editTextbirthdate"
             android:layout_width="0dp"
@@ -151,8 +127,32 @@
             android:textSize="16dp"
             android:textColor="#393E46"
             android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@+id/gender"
+            app:layout_constraintTop_toBottomOf="@+id/activityField"
             app:layout_constraintStart_toEndOf="@+id/birthdate"/>
+
+        <!-- 성별 -->
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="성별  :  "
+            android:textSize="16dp"
+            android:textColor="#000000"
+            app:layout_constraintTop_toBottomOf="@+id/birthdate"
+            app:layout_constraintStart_toStartOf="@+id/birthdate" />
+        <EditText
+            android:id="@+id/editTextgender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="25dp"
+            android:hint="성별 입력"
+            android:textSize="16dp"
+            android:textColor="#393E46"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@+id/birthdate"
+            app:layout_constraintStart_toEndOf="@+id/gender"/>
 
         <!-- 이메일 -->
         <TextView
@@ -163,8 +163,8 @@
             android:text="이메일  :  "
             android:textSize="16dp"
             android:textColor="#000000"
-            app:layout_constraintTop_toBottomOf="@+id/birthdate"
-            app:layout_constraintStart_toStartOf="@+id/birthdate" />
+            app:layout_constraintTop_toBottomOf="@+id/gender"
+            app:layout_constraintStart_toStartOf="@+id/gender" />
         <EditText
             android:id="@+id/editTextemail"
             android:layout_width="0dp"
@@ -175,7 +175,7 @@
             android:textSize="16dp"
             android:textColor="#393E46"
             android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@+id/birthdate"
+            app:layout_constraintTop_toBottomOf="@+id/gender"
             app:layout_constraintStart_toEndOf="@+id/email"/>
 
         <!-- 내정보 편집 버튼 -->

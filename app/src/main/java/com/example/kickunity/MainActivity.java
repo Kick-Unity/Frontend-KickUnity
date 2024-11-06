@@ -1,179 +1,129 @@
 package com.example.kickunity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
-
-    private BottomNavigationView mBottomNavigationView;
-    private FloatingActionButton fab;
-    private FloatingActionButton fabMain;
-    private View cardOption1;
-    private View cardOption2;
-    private boolean isCardVisible = false;
-    private boolean isFabMainVisible = false; // 플로팅 버튼 상태 추가
-    private static final int WRITE_REQUEST_CODE = 1;
-    private PostViewModel postViewModel;
-
-    /*
-    CheckBox checkBoxTerms = findViewById(R.id.checkBoxTerms);
-    CheckBox checkBoxPrivacy = findViewById(R.id.checkBoxPrivacy);
-    Button buttonSignUp = findViewById(R.id.buttonSignUp);
-    */
+    private EditText editTextEmail, editTextPassword;
+    private Button buttonLogin, buttonJoin;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.sign_in);
 
-        // 로그인 버튼 클릭 시
-        // 비밀번호 찾기 버튼 클릭 시
-        /* sign_in.xml에서 회원가입 버튼 클릭시
-        1. 필수 약관이 체크되었을 때만 버튼을 활성화
-        checkBoxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            buttonSignUp.setEnabled(checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked());
-        });
-        checkBoxPrivacy.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            buttonSignUp.setEnabled(checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked());
-        });
-        2. 이메일 인증번호 받기 버튼 클릭 시
-        buttonSignUp.setOnClickListener(v -> {
-            if (checkBoxTerms.isChecked() && checkBoxPrivacy.isChecked()) {
-                // 회원가입 절차 실행
-                Toast.makeText(this, "인증 번호를 발송하였습니다.", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "필수 약관에 동의해야 합니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-        */
+        initializeViews();
+        setupLoginButton();
+        setupJoinButton();
+    }
 
-        fab = findViewById(R.id.fab);
-        fabMain = findViewById(R.id.fab_main);
-        cardOption1 = findViewById(R.id.card_option_1);
-        cardOption2 = findViewById(R.id.card_option_2);
+    private void initializeViews() {
+        editTextEmail = findViewById(R.id.emailInput);
+        editTextPassword = findViewById(R.id.passwordInput);
+        buttonLogin = findViewById(R.id.loginButton);
+        buttonJoin = findViewById(R.id.join);
+    }
 
-        fabMain.hide(); // 초기에는 플로팅 버튼 숨기기
-        hideCardOptions(); // 카드 뷰 초기 숨기기
+    private void setupLoginButton() {
+        buttonLogin.setOnClickListener(v -> {
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
 
-        fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, WriteActivity.class);
-            startActivityForResult(intent, WRITE_REQUEST_CODE);
-        });
-
-        postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
-        loadFragment(new HomeFragment()); // HomeFragment를 기본으로 로드
-
-        mBottomNavigationView = findViewById(R.id.bottom_navigation);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
-            int id = item.getItemId();
-
-            if (id == R.id.nav_home) {
-                selectedFragment = new HomeFragment();
-                fab.show();
-                hideCardOptions(); // 카드 뷰 숨기기
-                fabMain.hide(); // nav_home 선택 시 플로팅 버튼 숨기기
-            } else if (id == R.id.nav_team) {
-                selectedFragment = new TeamFragment(); // TeamFragment 추가
-                fab.hide(); // 기본 FAB 숨기기
-                showFabMain(); // 플로팅 버튼 보이기
-                toggleCardOptions(); // 카드 뷰 보이기
-            } else if (id == R.id.nav_chat) {
-                selectedFragment = new ChatFragment(); // ChatFragment 추가
-                fab.hide();
-                hideCardOptions(); // 카드 뷰 숨기기
-                fabMain.hide(); // nav_chat 선택 시 플로팅 버튼 숨기기
-            } else if (id == R.id.nav_profile) {
-                selectedFragment = new ProfileFragment(); // ProfileFragment 추가
-                fab.hide();
-                hideCardOptions(); // 카드 뷰 숨기기
-                fabMain.hide(); // nav_profile 선택 시 플로팅 버튼 숨기기
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(MainActivity.this, "이메일과 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            if (selectedFragment != null) {
-                loadFragment(selectedFragment);
+            loginUser(email, password);
+        });
+    }
+
+    private void setupJoinButton() {
+        buttonJoin.setOnClickListener(v -> {
+            // SignIn2Activity로 이동
+            Intent intent = new Intent(MainActivity.this, SignIn2Activity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void loginUser(String email, String password) {
+        // Retrofit 설정
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://15.165.133.129:8080/")  // 기본 URL ("/api/login" 경로는 @POST 어노테이션에 포함됨)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+        LoginRequest loginRequest = new LoginRequest(email, password);
+
+        // 로그인 요청 전에 프로그레스 다이얼로그 표시
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("로그인 중...");
+        progressDialog.show();
+
+        Call<LoginResponse> call = apiService.login(loginRequest);
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                // 프로그레스 다이얼로그 닫기
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginResponse loginResponse = response.body();
+
+                    String accessToken = loginResponse.getAccessToken();
+                    String refreshToken = loginResponse.getRefreshToken();
+
+                    // 토큰 저장
+                    saveTokens(accessToken, refreshToken);
+
+                    Toast.makeText(MainActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+                    redirectToHome();
+                } else {
+                    Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                }
             }
-            return true;
-        });
 
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
 
-        fabMain.setOnClickListener(view -> {
-            hideFabMain(); // fab_main 클릭 시 플로팅 버튼 숨기기
-        });
-
-        // 카드 옵션 클릭 리스너 설정
-        cardOption1.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, CreateTeamActivity.class);
-            startActivity(intent); // CreateTeamActivity 열기
-        });
-
-        cardOption2.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, SearchTeamActivity.class);
-            startActivity(intent); // SearchTeamActivity 열기
+                Log.e(TAG, "Network error: " + t.getMessage());
+                Toast.makeText(MainActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-
-    private void showFabMain() {
-        fabMain.show();
-        isFabMainVisible = true;
+    private void saveTokens(String accessToken, String refreshToken) {
+        getSharedPreferences("auth", MODE_PRIVATE)
+                .edit()
+                .putString("accessToken", accessToken)
+                .putString("refreshToken", refreshToken)
+                .apply();
     }
 
-    private void hideFabMain() {
-        fabMain.hide();
-        isFabMainVisible = false;
-        hideCardOptions(); // fab_main 숨길 때 카드 뷰도 숨기기
+    private void redirectToHome() {
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
-
-    private void toggleCardOptions() {
-        if (isCardVisible) {
-            hideCardOptions();
-        } else {
-            showCardOptions();
-        }
-    }
-
-    private void showCardOptions() {
-        cardOption1.setVisibility(View.VISIBLE);
-        cardOption2.setVisibility(View.VISIBLE);
-        isCardVisible = true;
-    }
-
-    private void hideCardOptions() {
-        cardOption1.setVisibility(View.GONE);
-        cardOption2.setVisibility(View.GONE);
-        isCardVisible = false;
-    }
-
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_container, fragment);
-        transaction.commit();
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == WRITE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            String title = data.getStringExtra("title");
-            String content = data.getStringExtra("content");
-            String category = data.getStringExtra("category");
-            String time = data.getStringExtra("time");
-
-            postViewModel.addPost(title, content, category, time);
-        }
-    }
-
 }

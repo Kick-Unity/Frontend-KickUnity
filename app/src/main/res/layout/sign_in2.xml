@@ -80,7 +80,8 @@
         app:layout_constraintTop_toBottomOf="@id/emailLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.9"/>
+        app:layout_constraintWidth_percent="0.9"
+        android:inputType="textEmailAddress"/>
 
     <!-- 비밀번호 텍스트 -->
     <TextView
@@ -93,7 +94,7 @@
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/sign_email"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="25dp" />
+        android:layout_marginStart="25dp"/>
 
     <!-- 비밀번호 입력 -->
     <EditText
@@ -131,7 +132,8 @@
         app:layout_constraintTop_toBottomOf="@id/nameLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintWidth_percent="0.9"
+        android:inputType="textPersonName"/>
 
     <!-- 생년월일 텍스트 -->
     <TextView
@@ -156,7 +158,8 @@
         app:layout_constraintTop_toBottomOf="@id/birthLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintWidth_percent="0.9"
+        android:inputType="text|date"/>
 
     <TextView
         android:id="@+id/termsAndPrivacyText"
