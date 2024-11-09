@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupJoinButton() {
         buttonJoin.setOnClickListener(v -> {
-            // SignIn2Activity로 이동
-            Intent intent = new Intent(MainActivity.this, SignIn2Activity.class);
+            // SignUpActivity 이동
+            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
             startActivity(intent);
         });
     }

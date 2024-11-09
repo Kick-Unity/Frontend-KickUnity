@@ -14,8 +14,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SignIn2Activity extends AppCompatActivity {
-    private static final String TAG = "SignIn2Activity";
+public class SignUpActivity extends AppCompatActivity {
+    private static final String TAG = "SignUpActivity";
     private ApiService apiService;
 
     private EditText editTextEmail, editTextPassword, editTextName, editTextBirth;
@@ -124,6 +124,6 @@ public class SignIn2Activity extends AppCompatActivity {
     }
 
     private void showToast(String message) {
-        Toast.makeText(SignIn2Activity.this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

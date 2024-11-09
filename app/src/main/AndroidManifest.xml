@@ -33,7 +33,7 @@
             android:exported="true" />
 
         <!-- 회원가입 액티비티 -->
-        <activity android:name=".SignIn2Activity"
+        <activity android:name=".SignUpActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
         <!-- 메인 액티비티 -->
