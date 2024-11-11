@@ -18,17 +18,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
-    private Button buttonLogin, buttonJoin;
+    private Button buttonLogin, buttonJoin, buttonFindPassword;
     private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_in);
+        setContentView(R.layout.login);
 
         initializeViews();
         setupLoginButton();
         setupJoinButton();
+        setupFindPassword();
     }
 
     private void initializeViews() {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.passwordInput);
         buttonLogin = findViewById(R.id.loginButton);
         buttonJoin = findViewById(R.id.join);
+        buttonFindPassword = findViewById(R.id.find_password);
     }
 
     private void setupLoginButton() {
@@ -54,11 +56,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupJoinButton() {
         buttonJoin.setOnClickListener(v -> {
-            // SignUpActivity 이동
-            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+            // email_verification 이동
+            Intent intent = new Intent(MainActivity.this, EmailVerificationActivity.class);
             startActivity(intent);
         });
     }
+
+    private void setupFindPassword() {
+        buttonFindPassword.setOnClickListener(v -> {
+            // FindPasswordActivity 이동
+            Intent intent = new Intent(MainActivity.this, FindPasswordActivity.class);
+            startActivity(intent);
+        });
+    }
+
 
     private void loginUser(String email, String password) {
         // Retrofit 설정

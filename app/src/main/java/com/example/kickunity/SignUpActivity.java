@@ -24,7 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_in2);  // XML 레이아웃 파일
+        setContentView(R.layout.join);  // XML 레이아웃 파일
 
         initializeViews();
         setupRetrofit();
@@ -74,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         if (name.isEmpty()) {
-            showToast("이름을 입력해주세요.");
+            showToast("닉네임을 입력해주세요.");
             return false;
         }
         if (birth.isEmpty()) {

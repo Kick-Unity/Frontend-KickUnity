@@ -28,15 +28,27 @@
             </intent-filter>
         </activity>
 
-        <!-- 메인 액티비티 -->
+        <!-- 메인(시작) 액티비티 -->
         <activity android:name=".MainActivity"
             android:exported="true" />
+
+        <!-- 이메일 인증 액티비티 -->
+        <activity android:name=".EmailVerificationActivity"
+            android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
+
+        <!-- 이메일 인증 코드 액티비티 -->
+        <activity android:name=".EmailVerificationCodeActivity"
+            android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
+
+        <!-- 비밀번호 찾기 액티비티 -->
+        <activity android:name=".FindPasswordActivity"
+            android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
         <!-- 회원가입 액티비티 -->
         <activity android:name=".SignUpActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
-        <!-- 메인 액티비티 -->
+        <!-- 홈 화면 액티비티 -->
         <activity android:name=".HomeActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 

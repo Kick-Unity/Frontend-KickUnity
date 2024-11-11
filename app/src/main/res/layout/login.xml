@@ -74,7 +74,7 @@
 
     <!-- 아이디 찾기 / 비밀번호 찾기 버튼 -->
     <Button
-        android:id="@+id/search_id"
+        android:id="@+id/find_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="아이디 찾기"
@@ -83,12 +83,12 @@
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/passwordInput"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/search_password"
+        app:layout_constraintTop_toTopOf="@+id/find_password"
         android:layout_marginStart="210dp"
         style="@style/Widget.MaterialComponents.Button.TextButton" />
 
     <Button
-        android:id="@+id/search_password"
+        android:id="@+id/find_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -109,7 +109,7 @@
         android:background="@drawable/button_radius"
         android:text="로그인"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/search_id"
+        app:layout_constraintTop_toBottomOf="@id/find_id"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.9" />
