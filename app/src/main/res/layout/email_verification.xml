@@ -72,7 +72,7 @@
 
     <!-- 이메일 입력 -->
     <EditText
-        android:id="@+id/sign_email"
+        android:id="@+id/editTextEmail"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
@@ -93,7 +93,7 @@
         android:background="@drawable/button_radius"
         android:text="이메일로 인증번호 받기"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/sign_email"
+        app:layout_constraintTop_toBottomOf="@id/editTextEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.9" />

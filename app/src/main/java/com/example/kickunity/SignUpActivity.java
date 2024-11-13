@@ -1,5 +1,6 @@
 package com.example.kickunity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -20,6 +21,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private EditText editTextEmail, editTextPassword, editTextName, editTextBirth;
     private Button buttonSignUp;
+    private String email;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,16 @@ public class SignUpActivity extends AppCompatActivity {
         initializeViews();
         setupRetrofit();
         setupSignUpButton();
+
+        // 이메일을 이전 화면에서 받아옴
+        email = getIntent().getStringExtra("email");
+
+        // 이메일을 입력 필드에 자동으로 채워넣기
+        if (email != null && !email.isEmpty()) {
+            editTextEmail.setText(email);
+        }
     }
+
 
     private void initializeViews() {
         // EditText와 Button 초기화
@@ -38,7 +50,12 @@ public class SignUpActivity extends AppCompatActivity {
         editTextName = findViewById(R.id.sign_name);
         editTextBirth = findViewById(R.id.sign_birth);
         buttonSignUp = findViewById(R.id.buttonSignUp);
+
+        // 이메일 필드를 수정 불가능하게 설정
+        editTextEmail.setEnabled(false);  // 이메일을 수정할 수 없도록 설정
+        editTextEmail.setFocusable(false);  // 이메일 필드를 포커스 할 수 없도록 설정
     }
+
 
     private void setupRetrofit() {
         // Retrofit 초기화
@@ -101,7 +118,12 @@ public class SignUpActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     long memberId = response.body();  // 서버에서 반환한 회원 ID
                     showToast("회원가입 성공! 회원 ID: " + memberId);
-                    finish();  // 회원가입 성공 시, 액티비티 종료
+
+                    // 회원가입 후, 이전 액티비티 모두 종료하고 MainActivity로 이동
+                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // 모든 액티비티 종료
+                    startActivity(intent);
+                    finish();  // 현재 액티비티 종료
                 } else {
                     String errorMessage = "회원가입 실패";
                     try {
@@ -122,6 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void showToast(String message) {
         Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
