@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void loginUser(String email, String password) {
         // Retrofit 설정
         Retrofit retrofit = new Retrofit.Builder()
@@ -104,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
                     // 토큰 저장
                     saveTokens(accessToken, refreshToken);
 
+                    // 이메일도 SharedPreferences에 저장
+                    saveUserEmail(email);
+
                     Toast.makeText(MainActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
                     redirectToHome();
                 } else {
@@ -130,6 +132,14 @@ public class MainActivity extends AppCompatActivity {
                 .putString("refreshToken", refreshToken)
                 .apply();
     }
+
+    private void saveUserEmail(String email) {
+        getSharedPreferences("auth", MODE_PRIVATE)
+                .edit()
+                .putString("userEmail", email)  // 이메일 저장
+                .apply();
+    }
+
 
     private void redirectToHome() {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);

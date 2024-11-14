@@ -74,7 +74,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     Intent intent = new Intent(EmailVerificationActivity.this, EmailVerificationCodeActivity.class);
                     intent.putExtra("email", email); // 이메일을 다음 화면으로 전달
                     startActivity(intent);
-                    //finish();
                 } else {
                     // 서버 응답이 실패했을 때
                     Toast.makeText(EmailVerificationActivity.this, "인증번호 전송에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
