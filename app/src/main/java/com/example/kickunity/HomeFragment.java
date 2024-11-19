@@ -112,10 +112,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // fab 다시 보이기
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        fab.show();
-
         return view;
     }
 }

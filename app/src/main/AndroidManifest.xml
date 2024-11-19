@@ -64,5 +64,17 @@
         <activity android:name=".SearchTeamActivity"
             android:exported="false" /> <!-- exported=false: 외부에서 호출되지 않으므로 exported=false -->
 
+        <!-- 프로필 편집 액티비티 -->
+        <activity android:name=".ProfileEditActivity"
+            android:exported="true" />
+
+        <!-- 닉네임 변경 액티비티 -->
+        <activity android:name=".NicknameChangeActivity"
+            android:exported="true" />
+
+        <!-- 비밀번호 변경 액티비티 -->
+        <activity android:name=".PasswordChangeActivity"
+            android:exported="true" />
+
     </application>
 </manifest>

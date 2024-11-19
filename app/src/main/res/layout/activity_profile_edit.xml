@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="3dp">
+
+    <!-- 뒤로가기 버튼 -->
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/arrow"
+        android:padding="16dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!-- 프로필 이미지 (클릭하여 편집 가능) -->
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/profile"
+        android:background="@drawable/circle"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextprofileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textColor="#393E46"
+        android:background="@android:color/transparent"
+        android:hint="닉네임"
+        app:layout_constraintTop_toBottomOf="@+id/profileImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <EditText
+        android:id="@+id/editTextemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textColor="#393E46"
+        android:hint="kick@unity.com"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextprofileName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/myInfo"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:background="@drawable/editprofile_background"
+        android:text="내 정보"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@+id/editTextemail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/myInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nickname_section"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/editprofile3"
+        app:layout_constraintTop_toBottomOf="@+id/myInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="start|center_vertical">
+
+        <TextView
+            android:id="@+id/nickname_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/id_wallet"
+            android:drawablePadding="8dp"
+            android:paddingLeft="15dp"
+            android:text="닉네임"
+            android:textColor="#000000"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/nickname_change_button"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="15dp"
+            android:backgroundTint="#2C3E50"
+            android:text="수정"
+            android:textColor="#FFFFFF"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/password_section"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/editprofile2"
+        app:layout_constraintTop_toBottomOf="@+id/nickname_section"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="start|center_vertical">
+
+        <TextView
+            android:id="@+id/password_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/password"
+            android:drawablePadding="8dp"
+            android:paddingLeft="15dp"
+            android:text="비밀번호"
+            android:textColor="#000000"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/password_change_button"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="15dp"
+            android:backgroundTint="#2C3E50"
+            android:text="수정"
+            android:textColor="#FFFFFF"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,8 +18,8 @@ import android.widget.Toast;
 public class HomeActivity extends AppCompatActivity {
 
     private BottomNavigationView mBottomNavigationView;
-    private FloatingActionButton fab;
-    private FloatingActionButton fabMain;
+    private FloatingActionButton fabCreatePost;
+    private FloatingActionButton fabTeamAction;
     private View cardOption1;
     private View cardOption2;
     private boolean isCardVisible = false;
@@ -27,22 +27,38 @@ public class HomeActivity extends AppCompatActivity {
     private static final int WRITE_REQUEST_CODE = 1;
     private PostViewModel postViewModel;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fab = findViewById(R.id.fab);
-        fabMain = findViewById(R.id.fab_main);
+        fabCreatePost = findViewById(R.id.fabCreatePost);
+        fabTeamAction = findViewById(R.id.fabTeamAction);
         cardOption1 = findViewById(R.id.card_option_1);
         cardOption2 = findViewById(R.id.card_option_2);
 
-        fabMain.hide(); // 초기에는 플로팅 버튼 숨기기
+        fabCreatePost.hide();
+        fabTeamAction.hide(); // 초기에는 플로팅 버튼 숨기기
         hideCardOptions(); // 카드 뷰 초기 숨기기
 
-        fab.setOnClickListener(view -> {
+        fabCreatePost.setOnClickListener(view -> {
+            String category = "전체 게시판"; // 기본 카테고리
+
+            // 현재 활성화된 프래그먼트 확인
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+            if (currentFragment instanceof SoccerBoardFragment) {
+                category = "축구 게시판";
+            } else if (currentFragment instanceof BasketballBoardFragment) {
+                category = "농구 게시판";
+            } else if (currentFragment instanceof BaseballBoardFragment) {
+                category = "야구 게시판";
+            } else if (currentFragment instanceof OtherSportsBoardFragment) {
+                category = "기타 스포츠 게시판";
+            }
+
+            // WriteActivity로 이동
             Intent intent = new Intent(HomeActivity.this, WriteActivity.class);
+            intent.putExtra("defaultCategory", category); // 카테고리 전달
             startActivityForResult(intent, WRITE_REQUEST_CODE);
         });
 
@@ -56,24 +72,24 @@ public class HomeActivity extends AppCompatActivity {
 
             if (id == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
-                fab.show();
+                fabCreatePost.hide();
                 hideCardOptions(); // 카드 뷰 숨기기
-                fabMain.hide(); // nav_home 선택 시 플로팅 버튼 숨기기
+                fabTeamAction.hide(); // nav_home 선택 시 플로팅 버튼 숨기기
             } else if (id == R.id.nav_team) {
                 selectedFragment = new TeamFragment(); // TeamFragment 추가
-                fab.hide(); // 기본 FAB 숨기기
+                fabCreatePost.hide(); // 기본 FAB 숨기기
                 showFabMain(); // 플로팅 버튼 보이기
                 toggleCardOptions(); // 카드 뷰 보이기
             } else if (id == R.id.nav_chat) {
                 selectedFragment = new ChatFragment(); // ChatFragment 추가
-                fab.hide();
+                fabCreatePost.hide();
                 hideCardOptions(); // 카드 뷰 숨기기
-                fabMain.hide(); // nav_chat 선택 시 플로팅 버튼 숨기기
+                fabTeamAction.hide(); // nav_chat 선택 시 플로팅 버튼 숨기기
             } else if (id == R.id.nav_profile) {
                 selectedFragment = new ProfileFragment(); // ProfileFragment 추가
-                fab.hide();
+                fabCreatePost.hide();
                 hideCardOptions(); // 카드 뷰 숨기기
-                fabMain.hide(); // nav_profile 선택 시 플로팅 버튼 숨기기
+                fabTeamAction.hide(); // nav_profile 선택 시 플로팅 버튼 숨기기
             }
 
             if (selectedFragment != null) {
@@ -83,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        fabMain.setOnClickListener(view -> {
+        fabTeamAction.setOnClickListener(view -> {
             hideFabMain(); // fab_main 클릭 시 플로팅 버튼 숨기기
         });
 
@@ -101,12 +117,12 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void showFabMain() {
-        fabMain.show();
+        fabTeamAction.show();
         isFabMainVisible = true;
     }
 
     private void hideFabMain() {
-        fabMain.hide();
+        fabTeamAction.hide();
         isFabMainVisible = false;
         hideCardOptions(); // fab_main 숨길 때 카드 뷰도 숨기기
     }

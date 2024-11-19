@@ -43,8 +43,8 @@ public class SoccerBoardFragment extends Fragment {
         });
 
         // fab 다시 보이기
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        fab.show();
+        FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
+        fabCreatePost.show();
 
         return view;
     }

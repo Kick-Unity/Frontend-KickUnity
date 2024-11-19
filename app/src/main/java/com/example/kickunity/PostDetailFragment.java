@@ -47,8 +47,8 @@ public class PostDetailFragment extends Fragment {
         timeTextView.setText(time);
 
         // fab 숨기기
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        fab.hide();
+        FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
+        fabCreatePost.hide();
 
 
         return view;

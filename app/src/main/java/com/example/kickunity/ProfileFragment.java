@@ -1,5 +1,6 @@
 package com.example.kickunity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,7 +47,15 @@ public class ProfileFragment extends Fragment {
             Log.e(TAG, "사용자 이메일 또는 액세스 토큰이 저장되지 않았습니다.");
         }
 
+        setupEditProfileButton();
+
         return view;
+    }
+    private void setupEditProfileButton() {
+        editProfileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
+            startActivity(intent);
+        });
     }
 
     // SharedPreferences에서 사용자 이메일 가져오기
@@ -99,4 +108,7 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+
+
 }

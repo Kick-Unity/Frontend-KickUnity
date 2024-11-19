@@ -74,7 +74,7 @@
         app:itemIconTint="#9A9BB1"
         app:itemTextColor="#9A9BB1" >
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_main"
+            android:id="@+id/fabTeamAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="125dp"
@@ -85,7 +85,7 @@
 
     <!-- FloatingActionButton: 하단 우측에 위치 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabCreatePost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

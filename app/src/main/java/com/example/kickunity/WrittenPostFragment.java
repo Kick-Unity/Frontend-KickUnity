@@ -1,5 +1,7 @@
 package com.example.kickunity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,11 +21,15 @@ public class WrittenPostFragment extends Fragment {
 
     private PostViewModel postViewModel;
     private LinearLayout writtenpost_scrollView;
+    private String currentUserEmail; // 현재 사용자의 이메일을 저장할 변수
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_writtenpost, container, false);
         writtenpost_scrollView = view.findViewById(R.id.writtenpost_scrollView);
+
+        // 현재 사용자 이메일 가져오기 (예시: SharedPreferences에서 가져오는 방식)
+        currentUserEmail = getCurrentUserEmail();
 
         // 뒤로 가기 버튼 설정
         ImageButton backButton = view.findViewById(R.id.backButton);
@@ -40,11 +46,15 @@ public class WrittenPostFragment extends Fragment {
             }
         });
 
-        // fab 다시 보이기
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        fab.hide();
-
         return view;
+    }
+
+    // 현재 사용자 이메일을 반환하는 메서드 (예시: SharedPreferences에서 가져오기)
+    private String getCurrentUserEmail() {
+        // 여기서 실제로 이메일을 가져오는 방법을 구현하세요.
+        // 예시로 SharedPreferences에서 가져오는 방식 사용
+        SharedPreferences prefs = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        return prefs.getString("user_email", ""); // "user_email" 키에 저장된 이메일 반환
     }
 
     private void addPostView(String title, String content, String category, String time) {
@@ -102,7 +112,6 @@ public class WrittenPostFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-
 
         // 구분선 추가
         View divider = new View(getContext());

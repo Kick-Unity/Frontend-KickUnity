@@ -27,6 +27,11 @@ public class MainBoardFragment extends Fragment {
         // 뒤로 가기 버튼 설정
         ImageButton backButton = view.findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
+            // 플로팅 버튼 숨기기
+            FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
+            if (fabCreatePost != null) {
+                fabCreatePost.hide();
+            }
             // Fragment 종료
             requireActivity().getSupportFragmentManager().popBackStack();
         });
@@ -40,8 +45,8 @@ public class MainBoardFragment extends Fragment {
         });
 
         // fab 다시 보이기
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        fab.show();
+        FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
+        fabCreatePost.show();
 
         return view;
     }
