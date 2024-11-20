@@ -2,7 +2,7 @@ package com.example.kickunity;
 
 public class MypageResponse {
     private String name;
-    private String team;
+    private String teamName;
     private String email;
     private String birth;
 
@@ -15,11 +15,11 @@ public class MypageResponse {
     }
 
     public String getTeam() {
-        return team;
+        return teamName;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setTeam(String teamName) {
+        this.teamName = teamName;
     }
 
     public String getEmail() {

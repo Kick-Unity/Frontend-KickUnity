@@ -1,127 +1,142 @@
 package com.example.kickunity;
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class WrittenPostFragment extends Fragment {
 
-    private PostViewModel postViewModel;
-    private LinearLayout writtenpost_scrollView;
-    private String currentUserEmail; // 현재 사용자의 이메일을 저장할 변수
+    private static final String TAG = "WrittenPostFragment";
+    private RecyclerView recyclerView;
+    private PostAdapter postAdapter;
+    private ApiService apiService;
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_writtenpost, container, false);
-        writtenpost_scrollView = view.findViewById(R.id.writtenpost_scrollView);
 
-        // 현재 사용자 이메일 가져오기 (예시: SharedPreferences에서 가져오는 방식)
-        currentUserEmail = getCurrentUserEmail();
+        // Retrofit API 초기화
+        apiService = RetrofitClient.getClient().create(ApiService.class);
 
-        // 뒤로 가기 버튼 설정
-        ImageButton backButton = view.findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            // Fragment 종료
-            requireActivity().getSupportFragmentManager().popBackStack();
-        });
+        // RecyclerView 및 UI 설정
+        setupRecyclerView(view);
+        setupBackButton(view);
+        setupFloatingActionButton();
 
-        postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
-        postViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
-            writtenpost_scrollView.removeAllViews(); // 기존 게시글 제거
-            for (PostViewModel.Post post : posts) {
-                addPostView(post.title, post.content, post.category, post.time);
-            }
-        });
+        // 사용자 게시글 목록 로드
+        loadMyBoards();
 
         return view;
     }
 
-    // 현재 사용자 이메일을 반환하는 메서드 (예시: SharedPreferences에서 가져오기)
-    private String getCurrentUserEmail() {
-        // 여기서 실제로 이메일을 가져오는 방법을 구현하세요.
-        // 예시로 SharedPreferences에서 가져오는 방식 사용
-        SharedPreferences prefs = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        return prefs.getString("user_email", ""); // "user_email" 키에 저장된 이메일 반환
+    private void setupRecyclerView(View view) {
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        postAdapter = new PostAdapter(new ArrayList<>(), this::openPostDetailFragment);
+        recyclerView.setAdapter(postAdapter);
     }
 
-    private void addPostView(String title, String content, String category, String time) {
-        LinearLayout postLayout = new LinearLayout(getContext());
-        postLayout.setOrientation(LinearLayout.VERTICAL);
-        postLayout.setPadding(32, 32, 32, 32);
-        postLayout.setBackgroundResource(R.drawable.post_background);
-        postLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        postLayout.setElevation(4);
+    private void setupBackButton(View view) {
+        ImageButton backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+    }
 
-        LinearLayout timeTitleLayout = new LinearLayout(getContext());
-        timeTitleLayout.setOrientation(LinearLayout.HORIZONTAL);
-        timeTitleLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+    private void setupFloatingActionButton() {
+        FloatingActionButton fabCreatePost = requireActivity().findViewById(R.id.fabCreatePost);
+        if (fabCreatePost != null) {
+            fabCreatePost.show();
+            fabCreatePost.setOnClickListener(v -> startActivity(new Intent(getContext(), WriteActivity.class)));
+        }
+    }
 
-        TextView postTime = new TextView(getContext());
-        postTime.setText(time);
-        postTime.setTextColor(Color.parseColor("#00ADB5"));
-        postTime.setBackgroundColor(Color.TRANSPARENT);
-        postTime.setPadding(8, 0, 30, 0);
-        postTime.setTextSize(18);
-        postTime.setTypeface(null, Typeface.BOLD);
+    private void loadMyBoards() {
+        String accessToken = getAccessTokenFromSharedPreferences();
 
-        TextView postTitle = new TextView(getContext());
-        postTitle.setText(title);
-        postTitle.setTextSize(18);
-        postTitle.setTextColor(Color.BLACK);
-        postTitle.setLayoutParams(new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        if (accessToken == null) {
+            showToast("로그인이 필요합니다.");
+            return;
+        }
 
-        // 시간과 제목을 수평으로 나란히 배치
-        timeTitleLayout.addView(postTime);
-        timeTitleLayout.addView(postTitle);
+        String authorizationHeader = "Bearer " + accessToken;
 
-        // postLayout에 시간과 제목 레이아웃 추가
-        postLayout.addView(timeTitleLayout);
+        apiService.getMyBoards(authorizationHeader).enqueue(new Callback<List<BoardSummaryResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<BoardSummaryResponse>> call, @NonNull Response<List<BoardSummaryResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<BoardSummaryResponse> boards = response.body();
+                    postAdapter.updatePosts(boards); // RecyclerView 데이터 갱신
+                    Log.d(TAG, "내가 쓴 게시글 조회 성공: " + boards.size() + "개");
+                } else {
+                    handleError(response);
+                }
+            }
 
-        // 터치 이벤트 추가
-        postLayout.setOnClickListener(v -> {
-            // PostDetailFragment로 이동하면서 해당 게시글의 정보를 전달
-            Fragment postDetailFragment = new PostDetailFragment();
-            Bundle args = new Bundle();
-            args.putString("title", title);
-            args.putString("content", content);
-            args.putString("category", category);
-            args.putString("time", time);
-            postDetailFragment.setArguments(args);
-
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_container, postDetailFragment) // frame_container는 PostDetailFragment가 들어갈 컨테이너의 ID입니다.
-                    .addToBackStack(null)
-                    .commit();
+            @Override
+            public void onFailure(@NonNull Call<List<BoardSummaryResponse>> call, @NonNull Throwable t) {
+                Log.e(TAG, "내가 쓴 게시글 요청 실패", t);
+                showToast("네트워크 오류가 발생했습니다.");
+            }
         });
+    }
 
-        // 구분선 추가
-        View divider = new View(getContext());
-        LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 2);
-        dividerParams.setMargins(0, 25, 0, 25);
-        divider.setLayoutParams(dividerParams);
-        divider.setBackgroundColor(Color.LTGRAY);
+    private String getAccessTokenFromSharedPreferences() {
+        if (getContext() == null) return null;
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("auth", getContext().MODE_PRIVATE);
+        return sharedPreferences.getString("accessToken", null);
+    }
 
-        writtenpost_scrollView.addView(postLayout);
-        writtenpost_scrollView.addView(divider);
+    private void handleError(Response<?> response) {
+        String errorMessage = "알 수 없는 오류가 발생했습니다.";
+        if (response.errorBody() != null) {
+            try {
+                errorMessage = response.errorBody().string();
+            } catch (Exception e) {
+                Log.e(TAG, "Error reading error body: " + e.getMessage(), e);
+            }
+        }
+        Log.e(TAG, "Error: " + errorMessage);
+        showToast("게시글 조회 중 오류가 발생했습니다.");
+    }
+
+    private void showToast(String message) {
+        if (getContext() != null) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openPostDetailFragment(BoardSummaryResponse post) {
+        Bundle args = new Bundle();
+        args.putString("title", post.getTitle());
+        args.putString("content", post.getContent());
+
+        Fragment postDetailFragment = new PostDetailFragment();
+        postDetailFragment.setArguments(args);
+
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, postDetailFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

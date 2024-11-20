@@ -1,11 +1,16 @@
 package com.example.kickunity;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -32,4 +37,34 @@ public interface ApiService {
             @Header("Authorization") String authorization,  // Authorization 헤더 추가
             @Query("email") String userEmail  // 사용자 이메일을 쿼리 파라미터로 추가
     );
+
+    // 카테고리별 게시글 조회
+    @GET("api/board/category/{category}")
+    Call<List<BoardSummaryResponse>> getBoardsByCategory(@Path("category") String category);
+
+    // 게시글 등록 API
+    @POST("api/board")
+    Call<BoardDetailResponse> addBoard(@Header("Authorization") String authorizationHeader, @Body AddBoardRequest request);
+
+    // 로그인한 사용자의 게시글 조회
+    @GET("api/board/myBoards")
+    Call<List<BoardSummaryResponse>> getMyBoards(@Header("Authorization") String token);
+
+    // 게시글 삭제
+    @DELETE("api/board/{id}")
+    Call<Void> deleteBoard(@Header("Authorization") String token, @Path("id") Long id);
+
+    // 게시글 수정
+    @PUT("api/board/{id}")
+    Call<BoardDetailResponse> updateBoard(@Header("Authorization") String token, @Path("id") Long id, @Body UpdateBoardRequest request);
+
+    // 게시글 검색
+    @GET("api/board/search")
+    Call<List<BoardSummaryResponse>> searchBoards(@Query("category") String category, @Query("keyword") String keyword);
+
+
+    // 리프레시 토큰을 사용하여 새로운 액세스 토큰을 발급받는 API
+    @POST("/api/reissue")
+    Call<RefreshTokenResponse> reissueAccessToken(@Header("Authorization") String refreshToken);
+
 }

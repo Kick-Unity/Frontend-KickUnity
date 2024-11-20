@@ -39,12 +39,10 @@ public class PostDetailFragment extends Fragment {
         TextView titleTextView = view.findViewById(R.id.postTitle);
         TextView contentTextView = view.findViewById(R.id.postContent);
         TextView categoryTextView = view.findViewById(R.id.postCategory);
-        TextView timeTextView = view.findViewById(R.id.postTime);
 
         titleTextView.setText(title);
         contentTextView.setText(content);
         categoryTextView.setText(category);
-        timeTextView.setText(time);
 
         // fab 숨기기
         FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);

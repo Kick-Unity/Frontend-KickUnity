@@ -1,132 +1,138 @@
 package com.example.kickunity;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainBoardFragment extends Fragment {
 
-    private PostViewModel postViewModel;
-    private LinearLayout home_scrollView;
+    private static final String TAG = "MainBoardFragment";
+    private RecyclerView recyclerView;
+    private PostAdapter postAdapter;
+    private ApiService apiService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mainboard, container, false);
-        home_scrollView = view.findViewById(R.id.home_scrollView);
 
-        // 뒤로 가기 버튼 설정
-        ImageButton backButton = view.findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            // 플로팅 버튼 숨기기
-            FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
-            if (fabCreatePost != null) {
-                fabCreatePost.hide();
-            }
-            // Fragment 종료
-            requireActivity().getSupportFragmentManager().popBackStack();
-        });
+        apiService = RetrofitClient.getClient().create(ApiService.class);
 
-        postViewModel = new ViewModelProvider(requireActivity()).get(PostViewModel.class);
-        postViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
-            home_scrollView.removeAllViews(); // 기존 게시글 제거
-            for (PostViewModel.Post post : posts) {
-                addPostView(post.title, post.content, post.category, post.time); // 시간 정보 추가
-            }
-        });
+        setupRecyclerView(view);
+        setupBackButton(view);
+        setupFloatingActionButton();
 
-        // fab 다시 보이기
-        FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
-        fabCreatePost.show();
+        // "All" 카테고리의 게시글 목록 가져오기
+        loadBoardsByCategory("All");
 
         return view;
     }
 
-    private void addPostView(String title, String content, String category, String time) {
-        LinearLayout postLayout = new LinearLayout(getContext());
-        postLayout.setOrientation(LinearLayout.VERTICAL);
-        postLayout.setPadding(32, 32, 32, 32); // 패딩을 크게 설정하여 공간을 많이 차지하게 함
-        postLayout.setBackgroundResource(R.drawable.post_background);
-        postLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        postLayout.setElevation(4); // 그림자 효과 추가
+    private void setupRecyclerView(View view) {
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        postAdapter = new PostAdapter(new ArrayList<>(), post -> openPostDetailFragment(post));
+        recyclerView.setAdapter(postAdapter);
+    }
 
-        // 시간과 제목을 위한 레이아웃
-        LinearLayout timeTitleLayout = new LinearLayout(getContext());
-        timeTitleLayout.setOrientation(LinearLayout.HORIZONTAL);
-        timeTitleLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        // 시간 TextView
-        TextView postTime = new TextView(getContext());
-        postTime.setText(time); // 전달받은 시간 사용
-        postTime.setTextColor(Color.parseColor("#00ADB5"));
-        postTime.setBackgroundColor(Color.TRANSPARENT); // 배경을 투명하게
-        postTime.setPadding(8, 0, 30, 0); // 여백 조정
-        postTime.setTextSize(18); // 글자 크기 설정
-        postTime.setTypeface(null, Typeface.BOLD);
-        postTime.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        // 제목 TextView
-        TextView postTitle = new TextView(getContext());
-        postTitle.setText(title);
-        postTitle.setTextSize(18);
-        postTitle.setTextColor(Color.BLACK);
-        postTitle.setLayoutParams(new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1)); // 제목이 나머지 공간을 차지하도록 설정
-
-        // 시간과 제목을 수평으로 나란히 배치
-        timeTitleLayout.addView(postTime);
-        timeTitleLayout.addView(postTitle);
-
-        // postLayout에 시간과 제목 레이아웃 추가
-        postLayout.addView(timeTitleLayout);
-
-        // 터치 이벤트 추가
-        postLayout.setOnClickListener(v -> {
-            // PostDetailFragment로 이동하면서 해당 게시글의 정보를 전달
-            Fragment postDetailFragment = new PostDetailFragment();
-            Bundle args = new Bundle();
-            args.putString("title", title);
-            args.putString("content", content);
-            args.putString("category", category);
-            args.putString("time", time);
-            postDetailFragment.setArguments(args);
-
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_container, postDetailFragment) // frame_container는 PostDetailFragment가 들어갈 컨테이너의 ID입니다.
-                    .addToBackStack(null)
-                    .commit();
+    private void setupBackButton(View view) {
+        ImageButton backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
+            if (fabCreatePost != null) {
+                fabCreatePost.hide();
+            }
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
+    }
 
-        // 구분선 추가
-        View divider = new View(getContext());
-        LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 2); // 높이 2px의 구분선
-        dividerParams.setMargins(0, 25, 0, 25); // 구분선의 위아래 여백을 더 크게 설정 (32dp)
-        divider.setLayoutParams(dividerParams);
-        divider.setBackgroundColor(Color.LTGRAY); // 구분선 색상 설정
+    private void setupFloatingActionButton() {
+        FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
+        if (fabCreatePost != null) {
+            fabCreatePost.show();
+            fabCreatePost.setOnClickListener(v -> startActivity(new Intent(getContext(), WriteActivity.class)));
+        }
+    }
 
-        // postLayout을 postContainer에 추가
-        home_scrollView.addView(postLayout);
+    private void openPostDetailFragment(BoardSummaryResponse post) {
+        Bundle args = new Bundle();
+        args.putString("title", post.getTitle());
+        args.putString("content", post.getContent());
 
-        // 구분선 추가
-        home_scrollView.addView(divider);
+        Fragment postDetailFragment = new PostDetailFragment();
+        postDetailFragment.setArguments(args);
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, postDetailFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void loadBoardsByCategory(String category) {
+        Call<List<BoardSummaryResponse>> call = apiService.getBoardsByCategory(category);
+
+        call.enqueue(new Callback<List<BoardSummaryResponse>>() {
+            @Override
+            public void onResponse(Call<List<BoardSummaryResponse>> call, Response<List<BoardSummaryResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<BoardSummaryResponse> boards = response.body();
+
+                    // 게시글 리스트를 ID 기준 내림차순으로 정렬
+                    sortBoardsByIdDesc(boards);
+
+                    // 어댑터에 정렬된 게시글 목록 전달
+                    postAdapter.updatePosts(boards);
+                    Log.d(TAG, "게시글 조회 성공: " + boards.size() + "개");
+                } else {
+                    handleError(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BoardSummaryResponse>> call, Throwable t) {
+                Log.e(TAG, "네트워크 요청 실패", t);
+                showToast("네트워크 오류가 발생했습니다.");
+            }
+        });
+    }
+
+    // ID 기준 내림차순 정렬 메서드
+    private void sortBoardsByIdDesc(List<BoardSummaryResponse> boards) {
+        // 게시글 ID가 높은 순서대로 정렬 (내림차순)
+        boards.sort((board1, board2) -> Long.compare(board2.getId(), board1.getId()));
     }
 
 
+    private void handleError(Response<?> response) {
+        String errorMessage;
+        try {
+            errorMessage = response.errorBody() != null ? response.errorBody().string() : "Unknown error occurred";
+        } catch (Exception e) {
+            errorMessage = "Error reading error body: " + e.getMessage();
+        }
+        Log.e(TAG, "Error code: " + response.code() + ", message: " + errorMessage);
+        showToast("Failed to load posts. Please try again later.");
+    }
+
+    private void showToast(String message) {
+        if (getContext() != null) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
