@@ -53,10 +53,14 @@ public class ProfileFragment extends Fragment {
     }
     private void setupEditProfileButton() {
         editProfileButton.setOnClickListener(v -> {
+            // 이메일과 닉네임을 Intent로 전달
             Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
+            intent.putExtra("userEmail", TextEmail.getText().toString()); // 이메일 전달
+            intent.putExtra("userName", TextprofileName.getText().toString()); // 닉네임 전달
             startActivity(intent);
         });
     }
+
 
     // SharedPreferences에서 사용자 이메일 가져오기
     private String getUserEmailFromSharedPreferences() {

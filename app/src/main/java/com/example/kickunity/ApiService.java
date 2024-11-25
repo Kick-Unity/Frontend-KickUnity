@@ -38,6 +38,15 @@ public interface ApiService {
             @Query("email") String userEmail  // 사용자 이메일을 쿼리 파라미터로 추가
     );
 
+    @POST("api/member/changeName")
+    Call<CheckResponse> changeNickname(@Header("Authorization") String authorizationHeader, @Body ChangeNameRequest request);
+
+    @POST("api/member/changePassword")
+    Call<CheckResponse> changePassword(
+            @Header("Authorization") String authorizationHeader,  // Authorization 헤더
+            @Body ChangePasswordRequest request                    // 비밀번호 변경 요청 데이터
+    );
+
     // 카테고리별 게시글 조회
     @GET("api/board/category/{category}")
     Call<List<BoardSummaryResponse>> getBoardsByCategory(@Path("category") String category);
@@ -64,7 +73,7 @@ public interface ApiService {
 
 
     // 리프레시 토큰을 사용하여 새로운 액세스 토큰을 발급받는 API
-    @POST("/api/reissue")
+    @POST("api/reissue")
     Call<RefreshTokenResponse> reissueAccessToken(@Header("Authorization") String refreshToken);
 
 }

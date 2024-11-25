@@ -33,8 +33,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextprofileName"
+    <TextView
+        android:id="@+id/TextprofileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25dp"
@@ -46,15 +46,15 @@
         app:layout_constraintTop_toBottomOf="@+id/profileImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-    <EditText
-        android:id="@+id/editTextemail"
+    <TextView
+        android:id="@+id/Textemail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18dp"
         android:textColor="#393E46"
         android:hint="kick@unity.com"
         android:background="@android:color/transparent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextprofileName"
+        app:layout_constraintTop_toBottomOf="@+id/TextprofileName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -67,7 +67,7 @@
         android:background="@drawable/editprofile_background"
         android:text="내 정보"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@+id/editTextemail"
+        app:layout_constraintTop_toBottomOf="@+id/Textemail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"/>
@@ -158,14 +158,5 @@
             android:textSize="12dp" />
 
     </LinearLayout>
-
-
-
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

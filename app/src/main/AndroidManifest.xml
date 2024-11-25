@@ -69,11 +69,11 @@
             android:exported="true" />
 
         <!-- 닉네임 변경 액티비티 -->
-        <activity android:name=".NicknameChangeActivity"
+        <activity android:name=".NicknameModifyActivity"
             android:exported="true" />
 
         <!-- 비밀번호 변경 액티비티 -->
-        <activity android:name=".PasswordChangeActivity"
+        <activity android:name=".PasswordModifyActivity"
             android:exported="true" />
 
     </application>
