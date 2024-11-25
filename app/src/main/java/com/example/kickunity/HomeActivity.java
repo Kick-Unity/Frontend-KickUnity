@@ -42,25 +42,28 @@ public class HomeActivity extends AppCompatActivity {
         hideCardOptions(); // 카드 뷰 초기 숨기기
 
         fabCreatePost.setOnClickListener(view -> {
-            String category = "전체 게시판"; // 기본 카테고리
+            String category = "ALL"; // 기본 카테고리
 
             // 현재 활성화된 프래그먼트 확인
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+
+            // 프래그먼트에 따라 카테고리 설정
             if (currentFragment instanceof SoccerBoardFragment) {
-                category = "축구 게시판";
+                category = "SOCCER";
             } else if (currentFragment instanceof BasketballBoardFragment) {
-                category = "농구 게시판";
+                category = "BASKETBALL";
             } else if (currentFragment instanceof BaseballBoardFragment) {
-                category = "야구 게시판";
+                category = "BASEBALL";
             } else if (currentFragment instanceof OtherSportsBoardFragment) {
-                category = "기타 스포츠 게시판";
+                category = "ETC";
             }
 
-            // WriteActivity로 이동
+            // 카테고리 값만 WriteActivity로 전달
             Intent intent = new Intent(HomeActivity.this, WriteActivity.class);
-            intent.putExtra("defaultCategory", category); // 카테고리 전달
+            intent.putExtra("defaultCategory", category); // 카테고리만 전달
             startActivityForResult(intent, WRITE_REQUEST_CODE);
         });
+
 
         postViewModel = new ViewModelProvider(this).get(PostViewModel.class);
         loadFragment(new HomeFragment()); // HomeFragment를 기본으로 로드

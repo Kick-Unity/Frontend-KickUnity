@@ -76,6 +76,7 @@ public class MainBoardFragment extends Fragment {
         args.putString("title", post.getTitle());
         args.putString("content", post.getContent());
 
+
         Fragment postDetailFragment = new PostDetailFragment();
         postDetailFragment.setArguments(args);
         requireActivity().getSupportFragmentManager().beginTransaction()
@@ -127,7 +128,7 @@ public class MainBoardFragment extends Fragment {
             errorMessage = "Error reading error body: " + e.getMessage();
         }
         Log.e(TAG, "Error code: " + response.code() + ", message: " + errorMessage);
-        showToast("Failed to load posts. Please try again later.");
+        showToast("게시글이 존재하지 않습니다.");
     }
 
     private void showToast(String message) {

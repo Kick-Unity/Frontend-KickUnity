@@ -44,20 +44,22 @@ public class WriteActivity extends AppCompatActivity {
         // Retrofit 초기화
         apiService = RetrofitClient.getClient().create(ApiService.class);
 
-        // 카테고리 설정
         String[] categories = {"ALL", "SOCCER", "BASKETBALL", "BASEBALL", "ETC"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
 
-        // 전달받은 기본 카테고리 설정
+        // 전달받은 기본 카테고리 값
         String defaultCategory = getIntent().getStringExtra("defaultCategory");
+
+        // 기본 카테고리가 null이 아니면 스피너에 선택된 카테고리 설정
         if (defaultCategory != null) {
             int position = adapter.getPosition(defaultCategory);
             if (position >= 0) {
-                categorySpinner.setSelection(position);
+                categorySpinner.setSelection(position); // 카테고리 선택
             }
         }
+
 
         // Back 버튼 리스너
         backButton.setOnClickListener(view -> finish());

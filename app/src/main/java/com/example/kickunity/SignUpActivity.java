@@ -18,8 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
     private ApiService apiService;
-
-    private EditText editTextEmail, editTextPassword, editTextName, editTextBirth;
+    private EditText editTextEmail, editTextPassword, editPasswordCheck, editTextName, editTextBirth;
     private Button buttonSignUp;
     private String email;
 
@@ -47,6 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
         // EditText와 Button 초기화
         editTextEmail = findViewById(R.id.sign_email);
         editTextPassword = findViewById(R.id.sign_password);
+        editPasswordCheck = findViewById(R.id.sign_passwordCheck);
         editTextName = findViewById(R.id.sign_name);
         editTextBirth = findViewById(R.id.sign_birth);
         buttonSignUp = findViewById(R.id.buttonSignUp);
@@ -78,16 +78,29 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean validateInputs() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        String passwordCheck = editPasswordCheck.getText().toString().trim();
         String name = editTextName.getText().toString().trim();
         String birth = editTextBirth.getText().toString().trim();
 
-        // 입력값이 비어있는지 체크
         if (email.isEmpty()) {
             showToast("이메일을 입력해주세요.");
             return false;
         }
         if (password.isEmpty()) {
             showToast("비밀번호를 입력해주세요.");
+            return false;
+        }
+        if (passwordCheck.isEmpty()) {
+            showToast("비밀번호 확인을 입력해주세요.");
+            return false;
+        }
+        if (!password.equals(passwordCheck)) {  // 비밀번호가 일치하지 않으면
+            showToast("비밀번호가 일치하지 않습니다.");  // 토스트 메시지 표시
+            return false;  // 더 이상의 처리를 하지 않고 리턴
+        }
+        // 비밀번호가 영문, 숫자, 특수문자 포함 8~16자 사이인지 체크
+        if (!isPasswordValid(password)) {
+            showToast("비밀번호는 8~16자 사이로, 영문, 숫자, 특수문자를 포함해야 합니다.");
             return false;
         }
         if (name.isEmpty()) {
@@ -100,6 +113,13 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    // 비밀번호 유효성 검사 (영문, 숫자, 특수문자 포함, 8~16자)
+    private boolean isPasswordValid(String password) {
+        // 정규식: 최소 하나의 영문, 숫자, 특수문자, 길이 8~16자
+        String regex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,16}$";
+        return password.matches(regex);
     }
 
     private void signUpUser() {

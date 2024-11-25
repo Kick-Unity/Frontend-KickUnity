@@ -44,15 +44,14 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- 닉네임 -->
-        <EditText
-            android:id="@+id/editTextprofileName"
+        <TextView
+            android:id="@+id/TextprofileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25dp"
             android:layout_marginTop="20dp"
             android:textStyle="bold"
             android:textColor="#393E46"
-            android:hint="닉네임"
             android:background="@android:color/transparent"
             app:layout_constraintTop_toBottomOf="@+id/profileImage"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,21 +67,19 @@
             android:text="소속팀  :  "
             android:textSize="16dp"
             android:textColor="#000000"
-            app:layout_constraintTop_toBottomOf="@+id/editTextprofileName"
+            app:layout_constraintTop_toBottomOf="@+id/TextprofileName"
             app:layout_constraintStart_toStartOf="parent" />
-        <EditText
-            android:id="@+id/editTextteamInfo"
+        <TextView
+            android:id="@+id/TextTeamInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="35dp"
-            android:hint="없음"
             android:textSize="16dp"
             android:textColor="#393E46"
             android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextprofileName"
+            app:layout_constraintTop_toBottomOf="@+id/TextprofileName"
             app:layout_constraintStart_toEndOf="@+id/teamInfo"/>
-
 
         <!-- 이메일 -->
         <TextView
@@ -95,8 +92,8 @@
             android:textColor="#000000"
             app:layout_constraintTop_toBottomOf="@+id/teamInfo"
             app:layout_constraintStart_toStartOf="@+id/teamInfo" />
-        <EditText
-            android:id="@+id/editTextemail"
+        <TextView
+            android:id="@+id/Textemail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -118,8 +115,8 @@
             android:textSize="16dp"
             app:layout_constraintTop_toBottomOf="@+id/email"
             app:layout_constraintStart_toStartOf="@+id/email" />
-        <EditText
-            android:id="@+id/editTextbirthdate"
+        <TextView
+            android:id="@+id/TextBirthdate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

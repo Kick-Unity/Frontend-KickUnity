@@ -126,7 +126,7 @@ public class BaseballBoardFragment extends Fragment {
             errorMessage = "Error reading error body: " + e.getMessage();
         }
         Log.e(TAG, "Error code: " + response.code() + ", message: " + errorMessage);
-        showToast("Failed to load posts. Please try again later.");
+        showToast("게시글이 존재하지 않습니다.");
     }
 
     private void showToast(String message) {

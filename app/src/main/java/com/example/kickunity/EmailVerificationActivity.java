@@ -1,5 +1,6 @@
 package com.example.kickunity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +60,11 @@ public class EmailVerificationActivity extends AppCompatActivity {
     private void sendVerificationEmail(String email) {
         // Retrofit 인스턴스를 가져옵니다.
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+
+        // 이메일 인증번호 요청시 프로그레스 다이얼로그 표시
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("인증번호 요청중...");
+        progressDialog.show();
 
         // 서버로 이메일 전송 요청
         EmailRequest emailRequest = new EmailRequest(email);

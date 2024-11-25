@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
         LoginRequest loginRequest = new LoginRequest(email, password);
 
-        // 로그인 요청 전에 프로그레스 다이얼로그 표시
+        // 로그인 요청시 프로그레스 다이얼로그 표시
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("로그인 중...");
         progressDialog.show();

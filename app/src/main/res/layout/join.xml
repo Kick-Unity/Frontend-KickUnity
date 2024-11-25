@@ -11,7 +11,7 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="25dp"
         android:background="#FFFFFF"
         android:src="@drawable/arrow"
@@ -23,8 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="뒤로가기"
-        android:layout_marginTop="35dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
         android:textStyle="bold"
         android:textColor="#393E46"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:text="회원가입"
         android:textStyle="bold"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="15dp"
         android:textColor="#393E46"
         android:textSize="40dp"
         app:layout_constraintTop_toBottomOf="@id/backButton"
@@ -96,7 +96,6 @@
         app:layout_constraintTop_toBottomOf="@id/sign_email"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="25dp"/>
-
     <!-- 비밀번호 입력 -->
     <EditText
         android:id="@+id/sign_password"
@@ -105,7 +104,35 @@
         android:layout_marginTop="10dp"
         android:inputType="textPassword"
         android:background="@drawable/rounded_corner"
+        android:hint="영문, 숫자, 하나 이상의 특수문자를 포함하는 8~16자"
+        android:textSize="13dp"
         app:layout_constraintTop_toBottomOf="@id/passwordLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <!-- 비밀번호 텍스트 -->
+    <TextView
+        android:id="@+id/password_CheckLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 확인"
+        android:layout_marginTop="20dp"
+        android:textColor="#393E46"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/sign_password"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="25dp"/>
+
+    <!-- 비밀번호 입력 -->
+    <EditText
+        android:id="@+id/sign_passwordCheck"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:inputType="textPassword"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintTop_toBottomOf="@id/password_CheckLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.9" />
@@ -119,7 +146,7 @@
         android:layout_marginTop="20dp"
         android:textColor="#393E46"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/sign_password"
+        app:layout_constraintTop_toBottomOf="@id/sign_passwordCheck"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="25dp" />
 
@@ -155,6 +182,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:hint="생년월일 8자리"
+        android:textSize="15dp"
         android:background="@drawable/rounded_corner"
         app:layout_constraintTop_toBottomOf="@id/birthLabel"
         app:layout_constraintStart_toStartOf="parent"

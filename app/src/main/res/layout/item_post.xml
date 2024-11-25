@@ -2,18 +2,52 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- 구분선 추가 -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="#393E46"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/postTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Post Title"
-        android:textSize="18sp"
-        android:textColor="#000000"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:textSize="18dp"
+        android:textColor="#393E46"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="MM/dd HH:mm"
+        android:textSize="13dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="15dp"
+        android:textColor="#393E46"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postTitle"/>
+
+    <!-- 구분선 추가 -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="#393E46"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

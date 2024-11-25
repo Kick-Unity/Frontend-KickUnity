@@ -18,7 +18,7 @@ import retrofit2.Response;
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
-    private EditText editTextProfileName, editTextTeamInfo, editTextEmail, editTextBirthdate;
+    private TextView TextprofileName, TextTeamInfo, TextEmail, TextBirthdate;
     private Button editProfileButton, logoutButton, deleteAccountButton;
 
     @Override
@@ -27,10 +27,10 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // EditText 필드를 초기화합니다
-        editTextProfileName = view.findViewById(R.id.editTextprofileName);
-        editTextTeamInfo = view.findViewById(R.id.editTextteamInfo);
-        editTextEmail = view.findViewById(R.id.editTextemail);
-        editTextBirthdate = view.findViewById(R.id.editTextbirthdate);
+        TextprofileName = view.findViewById(R.id.TextprofileName);
+        TextTeamInfo = view.findViewById(R.id.TextTeamInfo);
+        TextEmail = view.findViewById(R.id.Textemail);
+        TextBirthdate = view.findViewById(R.id.TextBirthdate);
 
         // 버튼 초기화
         editProfileButton = view.findViewById(R.id.editProfileButton);
@@ -85,16 +85,16 @@ public class ProfileFragment extends Fragment {
 
                     // 가져온 프로필 정보를 각 EditText에 설정
                     if (mypageResponse.getName() != null) {
-                        editTextProfileName.setText(mypageResponse.getName());
+                        TextprofileName.setText(mypageResponse.getName());
                     }
                     if (mypageResponse.getTeam() != null) {
-                        editTextTeamInfo.setText(mypageResponse.getTeam());
+                        TextTeamInfo.setText(mypageResponse.getTeam());
                     }
                     if (mypageResponse.getEmail() != null) {
-                        editTextEmail.setText(mypageResponse.getEmail());
+                        TextEmail.setText(mypageResponse.getEmail());
                     }
                     if (mypageResponse.getBirth() != null) {
-                        editTextBirthdate.setText(mypageResponse.getBirth());
+                        TextBirthdate.setText(mypageResponse.getBirth());
                     }
 
                 } else {

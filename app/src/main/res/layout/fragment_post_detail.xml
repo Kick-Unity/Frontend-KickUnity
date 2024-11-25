@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <View
-        android:id="@+id/hr3"
+        android:id="@+id/hr"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#393E46"
@@ -49,6 +49,77 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         app:layout_constraintTop_toBottomOf="@+id/backButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/hr"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start|center_vertical">
+
+            <TextView
+                android:id="@+id/postdetail_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/profile2"
+                android:drawablePadding="8dp"
+                android:paddingLeft="15dp"
+                android:textColor="#000000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start|center_vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/postdetail_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="닉네임"
+                    android:textColor="#393E46"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/postdetail_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MM/dd HH:mm"
+                    android:textColor="#393E46"
+                    android:textSize="11dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/hr1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#393E46"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -61,11 +132,11 @@
         android:textSize="17dp"
         android:textColor="#393E46"
         android:hint="글 제목"
-        app:layout_constraintTop_toBottomOf="@+id/hr3"
+        app:layout_constraintTop_toBottomOf="@+id/hr1"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <View
-        android:id="@+id/hr1"
+        android:id="@+id/hr2"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#393E46"
@@ -79,9 +150,9 @@
     <ScrollView
         android:id="@+id/post_detail_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="450dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toTopOf="@id/hr1">
+        app:layout_constraintTop_toTopOf="@id/hr2">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,7 +168,7 @@
     </ScrollView>
 
     <View
-        android:id="@+id/hr2"
+        android:id="@+id/hr3"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#393E46"
@@ -117,7 +188,7 @@
         android:textColor="#00ADB5"
         android:background="@drawable/button_radius"
         android:backgroundTint="#333333"
-        app:layout_constraintTop_toBottomOf="@+id/hr2"
+        app:layout_constraintTop_toBottomOf="@+id/hr3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
