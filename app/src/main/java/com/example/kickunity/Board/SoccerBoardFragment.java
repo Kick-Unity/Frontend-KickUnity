@@ -71,9 +71,15 @@ public class SoccerBoardFragment extends Fragment {
         FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
         if (fabCreatePost != null) {
             fabCreatePost.show();
-            fabCreatePost.setOnClickListener(v -> startActivity(new Intent(getContext(), WriteActivity.class)));
+            fabCreatePost.setOnClickListener(v -> {
+                // "SOCCER" 카테고리 정보를 WriteActivity로 전달
+                Intent intent = new Intent(getContext(), WriteActivity.class);
+                intent.putExtra("defaultCategory", "SOCCER");  // 카테고리 정보 전달
+                startActivity(intent);
+            });
         }
     }
+
 
     private void openPostDetailFragment(BoardSummaryResponse post) {
         Bundle args = new Bundle();

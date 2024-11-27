@@ -1,5 +1,6 @@
 package com.example.kickunity.Board;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -55,34 +56,38 @@ public class PostDetailFragment extends Fragment {
 
             // 서버로부터 게시글 상세 정보 가져오기
             fetchPostDetails(postId);
-        }
 
-        // More 버튼 클릭 시 팝업 메뉴 설정
-        ImageButton moreButton = view.findViewById(R.id.moreButton);
-        moreButton.setOnClickListener(v -> {
-            // 팝업 메뉴 생성
-            PopupMenu popupMenu = new PopupMenu(getContext(), v);
-            getActivity().getMenuInflater().inflate(R.menu.menu_post_options, popupMenu.getMenu());
+            // More 버튼 클릭 시 팝업 메뉴 설정
+            ImageButton moreButton = view.findViewById(R.id.moreButton);
+            moreButton.setOnClickListener(v -> {
+                // 팝업 메뉴 생성
+                PopupMenu popupMenu = new PopupMenu(getContext(), v);
+                getActivity().getMenuInflater().inflate(R.menu.menu_post_options, popupMenu.getMenu());
 
-            // 메뉴 항목 클릭 시의 동작 처리
-            popupMenu.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.menu_edit) {
-                    // 수정 버튼 클릭 시
+                // 메뉴 항목 클릭 시의 동작 처리
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    if (item.getItemId() == R.id.menu_edit) {
+                        if (postId != null) { // postId가 null이 아닌지 확인
+                            Intent intent = new Intent(requireContext(), EditActivity.class);
+                            intent.putExtra("boardId", postId); // 게시글 ID 전달
+                            startActivity(intent);
+                        } else {
+                            Log.e("PostDetailFragment", "postId is null, cannot start EditActivity");
+                            Toast.makeText(requireContext(), "게시글 ID를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    } else if (item.getItemId() == R.id.menu_delete) {
+                        // 삭제 버튼 클릭 시
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
 
-                    return true;
-                } else if (item.getItemId() == R.id.menu_delete) {
-                    // 삭제 버튼 클릭 시
-                    // onDeletePost();
-                    return true;
-                } else {
-                    return false;
-                }
+                // 메뉴 표시
+                popupMenu.show();
             });
-
-            // 메뉴 표시
-            popupMenu.show();
-        });
-
+        }
         return view;
     }
 
@@ -112,7 +117,6 @@ public class PostDetailFragment extends Fragment {
         });
     }
 
-    // UI를 서버로부터 받은 게시글 상세 정보로 업데이트
     // UI를 서버로부터 받은 게시글 상세 정보로 업데이트
     private void updateUIWithPostDetails(BoardDetailResponse boardDetail) {
         View view = getView();

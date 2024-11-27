@@ -76,7 +76,9 @@ public class MainBoardFragment extends Fragment {
         if (fabCreatePost != null) {
             fabCreatePost.show();
             fabCreatePost.setOnClickListener(v -> {
+                // "SOCCER" 카테고리 정보를 WriteActivity로 전달
                 Intent intent = new Intent(getContext(), WriteActivity.class);
+                intent.putExtra("defaultCategory", "ALL");  // 카테고리 정보 전달
                 startActivity(intent);
             });
         }
