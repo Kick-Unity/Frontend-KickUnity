@@ -1,5 +1,6 @@
 package com.example.kickunity.Board;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.kickunity.R;
@@ -78,6 +80,9 @@ public class PostDetailFragment extends Fragment {
                         return true;
                     } else if (item.getItemId() == R.id.menu_delete) {
                         // 삭제 버튼 클릭 시
+                        if (postId != null) {
+                            confirmDeletePost(postId); // 게시글 삭제 확인 다이얼로그 호출
+                        }
                         return true;
                     } else {
                         return false;
@@ -171,4 +176,48 @@ public class PostDetailFragment extends Fragment {
         }
     }
 
+    // 게시글 삭제 확인 다이얼로그
+    private void confirmDeletePost(Long postId) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("게시글 삭제")
+                .setMessage("정말로 게시글을 삭제하시겠습니까?")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deletePost(postId); // 사용자가 확인을 눌렀을 때 삭제 실행
+                    }
+                })
+                .setNegativeButton("취소", null) // 취소 버튼 클릭 시 아무 작업 하지 않음
+                .show();
+    }
+
+    // 게시글 삭제 메서드
+    private void deletePost(Long postId) {
+        String accessToken = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE).getString("accessToken", null);
+
+        if (accessToken == null) {
+            Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String authorizationHeader = "Bearer " + accessToken;
+
+        // 서버에 게시글 삭제 요청
+        boardApiService.deleteBoard(authorizationHeader, postId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    requireActivity().getSupportFragmentManager().popBackStack(); // 삭제 후 이전 화면으로 돌아가기
+                } else {
+                    Toast.makeText(getContext(), "게시글 삭제 실패. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
