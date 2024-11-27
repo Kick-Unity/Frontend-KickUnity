@@ -20,7 +20,7 @@
         tools:targetApi="31">
 
         <!-- 스플래시 액티비티 -->
-        <activity android:name=".SplashActivity"
+        <activity android:name=".Auth.SplashActivity"
             android:exported="true"> <!-- exported=true: 앱이 실행되는 첫 화면이므로 exported=true -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,51 +29,51 @@
         </activity>
 
         <!-- 메인(시작) 액티비티 -->
-        <activity android:name=".MainActivity"
+        <activity android:name=".Auth.Login"
             android:exported="true" />
 
         <!-- 이메일 인증 액티비티 -->
-        <activity android:name=".EmailVerificationActivity"
+        <activity android:name=".Auth.EmailVerificationActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
         <!-- 이메일 인증 코드 액티비티 -->
-        <activity android:name=".EmailVerificationCodeActivity"
+        <activity android:name=".Auth.EmailVerificationCodeActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
         <!-- 비밀번호 찾기 액티비티 -->
-        <activity android:name=".FindPasswordActivity"
+        <activity android:name=".Auth.FindPasswordActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
         <!-- 회원가입 액티비티 -->
-        <activity android:name=".SignUpActivity"
+        <activity android:name=".Auth.SignUpActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
         <!-- 홈 화면 액티비티 -->
-        <activity android:name=".HomeActivity"
+        <activity android:name=".Auth.HomeActivity"
             android:exported="true" /> <!-- 이 액티비티가 다른 앱에서 호출될 가능성이 있으면 exported=true -->
 
         <!-- 글쓰기 액티비티 -->
-        <activity android:name=".WriteActivity"
+        <activity android:name=".Board.WriteActivity"
             android:exported="false" /> <!-- exported=false: 외부에서 호출되지 않으므로 exported=false -->
 
         <!-- 팀 만들기 액티비티 -->
-        <activity android:name=".CreateTeamActivity"
+        <activity android:name=".Team.CreateTeamActivity"
             android:exported="false" /> <!-- exported=false: 외부에서 호출되지 않으므로 exported=false -->
 
         <!-- 팀 검색 액티비티 -->
-        <activity android:name=".SearchTeamActivity"
+        <activity android:name=".Team.TeamSearchActivity"
             android:exported="false" /> <!-- exported=false: 외부에서 호출되지 않으므로 exported=false -->
 
         <!-- 프로필 편집 액티비티 -->
-        <activity android:name=".ProfileEditActivity"
+        <activity android:name=".Profile.ProfileEditActivity"
             android:exported="true" />
 
         <!-- 닉네임 변경 액티비티 -->
-        <activity android:name=".NicknameModifyActivity"
+        <activity android:name=".Profile.NicknameModifyActivity"
             android:exported="true" />
 
         <!-- 비밀번호 변경 액티비티 -->
-        <activity android:name=".PasswordModifyActivity"
+        <activity android:name=".Profile.PasswordModifyActivity"
             android:exported="true" />
 
     </application>

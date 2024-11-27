@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/kcikunityText"
+        android:id="@+id/kickunityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -61,7 +61,7 @@
         android:hint="search"
         android:paddingLeft="10dp"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@+id/kcikunityText"
+        app:layout_constraintTop_toBottomOf="@+id/kickunityText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
