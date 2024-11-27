@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.kickunity.R;
 import com.example.kickunity.Auth.RetrofitClient; // RetrofitClient 임포트
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +43,9 @@ public class PostDetailFragment extends Fragment {
         backButton.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().popBackStack();
         });
+
+        FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
+        fabCreatePost.hide();
 
         // 전달된 게시글 ID 받기
         Bundle args = getArguments();

@@ -131,13 +131,13 @@ public class WrittenPostFragment extends Fragment {
 
     private void openPostDetailFragment(BoardSummaryResponse post) {
         Bundle args = new Bundle();
-        args.putString("title", post.getTitle());
-        args.putString("content", post.getContent());
+        args.putLong("postId", post.getId()); // 게시글 ID만 전달
 
         Fragment postDetailFragment = new PostDetailFragment();
-        postDetailFragment.setArguments(args);
+        postDetailFragment.setArguments(args);  // 데이터 전달
 
-        requireActivity().getSupportFragmentManager().beginTransaction()
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.frame_container, postDetailFragment)
                 .addToBackStack(null)
                 .commit();
