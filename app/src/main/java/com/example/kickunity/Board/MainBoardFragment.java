@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -30,24 +31,22 @@ public class MainBoardFragment extends Fragment {
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
     private BoardApiService boardApiService;
+    private EditText searchEditText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mainboard, container, false);
 
-        // Retrofit을 통해 BoardApiService 초기화
+        // Retrofit 초기화
         boardApiService = RetrofitClient.getBoardApiService();
 
-        // RecyclerView 초기화
+        // UI 초기화
         setupRecyclerView(view);
-
-        // 뒤로가기 버튼 설정
         setupBackButton(view);
-
-        // FloatingActionButton 설정
+        setupSearchUI(view);
         setupFloatingActionButton();
 
-        // "All" 카테고리 게시글 로드
+        // 게시글 로드
         loadBoardsByCategory("All");
 
         return view;
@@ -71,14 +70,26 @@ public class MainBoardFragment extends Fragment {
         });
     }
 
+    private void setupSearchUI(View view) {
+        searchEditText = view.findViewById(R.id.searchEditText);
+        ImageButton searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(v -> {
+            String keyword = searchEditText.getText().toString().trim();
+            if (!keyword.isEmpty()) {
+                searchBoardsByKeyword("All", keyword);
+            } else {
+                showToast("검색어를 입력하세요.");
+            }
+        });
+    }
+
     private void setupFloatingActionButton() {
         FloatingActionButton fabCreatePost = getActivity().findViewById(R.id.fabCreatePost);
         if (fabCreatePost != null) {
             fabCreatePost.show();
             fabCreatePost.setOnClickListener(v -> {
-                // "SOCCER" 카테고리 정보를 WriteActivity로 전달
                 Intent intent = new Intent(getContext(), WriteActivity.class);
-                intent.putExtra("defaultCategory", "ALL");  // 카테고리 정보 전달
+                intent.putExtra("defaultCategory", "ALL"); // 기본 카테고리 전달
                 startActivity(intent);
             });
         }
@@ -86,10 +97,10 @@ public class MainBoardFragment extends Fragment {
 
     private void openPostDetailFragment(BoardSummaryResponse post) {
         Bundle args = new Bundle();
-        args.putLong("postId", post.getId()); // 게시글 ID만 전달
+        args.putLong("postId", post.getId()); // 게시글 ID 전달
 
         Fragment postDetailFragment = new PostDetailFragment();
-        postDetailFragment.setArguments(args);  // 데이터 전달
+        postDetailFragment.setArguments(args);
 
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -106,14 +117,52 @@ public class MainBoardFragment extends Fragment {
             public void onResponse(Call<List<BoardSummaryResponse>> call, Response<List<BoardSummaryResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<BoardSummaryResponse> boards = response.body();
-
-                    // 게시글 정렬 및 업데이트
                     sortBoardsByIdDesc(boards);
                     postAdapter.updatePosts(boards);
-
                     Log.d(TAG, "게시글 조회 성공: " + boards.size() + "개");
                 } else {
                     handleError(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BoardSummaryResponse>> call, Throwable t) {
+                Log.e(TAG, "네트워크 요청 실패: " + t.getMessage(), t);
+                showToast("네트워크 오류가 발생했습니다.");
+            }
+        });
+    }
+
+    private void searchBoardsByKeyword(String category, String keyword) {
+        if (category == null || category.trim().isEmpty()) {
+            Log.e(TAG, "카테고리 값이 유효하지 않습니다.");
+            showToast("카테고리를 선택하세요.");
+            return;
+        }
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            Log.e(TAG, "키워드 값이 유효하지 않습니다.");
+            showToast("검색어를 입력하세요.");
+            return;
+        }
+
+        // Retrofit API 호출
+        Call<List<BoardSummaryResponse>> call = boardApiService.searchBoards(category.trim(), keyword.trim());
+        call.enqueue(new Callback<List<BoardSummaryResponse>>() {
+            @Override
+            public void onResponse(Call<List<BoardSummaryResponse>> call, Response<List<BoardSummaryResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<BoardSummaryResponse> boards = response.body();
+                    sortBoardsByIdDesc(boards);  // 게시글 정렬
+                    postAdapter.updatePosts(boards);  // RecyclerView 업데이트
+                    Log.d(TAG, "검색 성공: " + boards.size() + "개 게시글 로드됨.");
+                } else if (response.code() == 204) {
+                    // 검색 결과 없음
+                    postAdapter.updatePosts(new ArrayList<>());  // 빈 리스트 설정
+                    Log.d(TAG, "검색 결과 없음.");
+                    showToast("검색 결과가 없습니다.");
+                } else {
+                    handleError(response);  // 서버 에러 처리
                 }
             }
 

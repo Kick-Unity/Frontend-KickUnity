@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class OtherSportsBoardFragment extends Fragment {
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
     private BoardApiService boardApiService;
+    private EditText searchEditText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class OtherSportsBoardFragment extends Fragment {
         setupRecyclerView(view);
         setupBackButton(view);
         setupFloatingActionButton();
+        setupSearchUI(view);
 
         // "ETC" 카테고리의 게시글 목록 가져오기
         loadBoardsByCategory("ETC");
@@ -64,6 +67,19 @@ public class OtherSportsBoardFragment extends Fragment {
                 fabCreatePost.hide();
             }
             requireActivity().getSupportFragmentManager().popBackStack();
+        });
+    }
+
+    private void setupSearchUI(View view) {
+        searchEditText = view.findViewById(R.id.searchEditText);
+        ImageButton searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(v -> {
+            String keyword = searchEditText.getText().toString().trim();
+            if (!keyword.isEmpty()) {
+                searchBoardsByKeyword("All", keyword);
+            } else {
+                showToast("검색어를 입력하세요.");
+            }
         });
     }
 
@@ -117,6 +133,47 @@ public class OtherSportsBoardFragment extends Fragment {
             @Override
             public void onFailure(Call<List<BoardSummaryResponse>> call, Throwable t) {
                 Log.e(TAG, "네트워크 요청 실패", t);
+                showToast("네트워크 오류가 발생했습니다.");
+            }
+        });
+    }
+
+    private void searchBoardsByKeyword(String category, String keyword) {
+        if (category == null || category.trim().isEmpty()) {
+            Log.e(TAG, "카테고리 값이 유효하지 않습니다.");
+            showToast("카테고리를 선택하세요.");
+            return;
+        }
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            Log.e(TAG, "키워드 값이 유효하지 않습니다.");
+            showToast("검색어를 입력하세요.");
+            return;
+        }
+
+        // Retrofit API 호출
+        Call<List<BoardSummaryResponse>> call = boardApiService.searchBoards(category.trim(), keyword.trim());
+        call.enqueue(new Callback<List<BoardSummaryResponse>>() {
+            @Override
+            public void onResponse(Call<List<BoardSummaryResponse>> call, Response<List<BoardSummaryResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<BoardSummaryResponse> boards = response.body();
+                    sortBoardsByIdDesc(boards);  // 게시글 정렬
+                    postAdapter.updatePosts(boards);  // RecyclerView 업데이트
+                    Log.d(TAG, "검색 성공: " + boards.size() + "개 게시글 로드됨.");
+                } else if (response.code() == 204) {
+                    // 검색 결과 없음
+                    postAdapter.updatePosts(new ArrayList<>());  // 빈 리스트 설정
+                    Log.d(TAG, "검색 결과 없음.");
+                    showToast("검색 결과가 없습니다.");
+                } else {
+                    handleError(response);  // 서버 에러 처리
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BoardSummaryResponse>> call, Throwable t) {
+                Log.e(TAG, "네트워크 요청 실패: " + t.getMessage(), t);
                 showToast("네트워크 오류가 발생했습니다.");
             }
         });

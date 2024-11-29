@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/kcikunityText"
+        android:id="@+id/kickunityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -50,20 +50,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <EditText
+    <LinearLayout
         android:id="@+id/search"
-        android:layout_width="320dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/search"
-        android:drawableStart="@drawable/searchimage"
-        android:drawablePadding="10dp"
-        android:hint="search"
-        android:paddingLeft="10dp"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@+id/kcikunityText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/kickunityText">
+
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:hint="검색어를 입력하세요"
+            android:textSize="15dp"
+            android:background="@drawable/search"/>
+
+        <ImageButton
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/searchimage"
+            android:backgroundTint="#FFFFFF"
+            android:contentDescription="Search" />
+    </LinearLayout>
 
     <!-- RecyclerView는 search 뷰 아래에 배치 -->
     <androidx.recyclerview.widget.RecyclerView

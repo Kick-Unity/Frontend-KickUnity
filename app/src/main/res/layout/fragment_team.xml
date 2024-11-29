@@ -239,6 +239,19 @@
         android:text="팀 정보 편집"
         android:background="@drawable/button_radius"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/deleteTeamButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/deleteTeamButton"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="팀 삭제"
+        android:textColor="#333333"
+        android:background="@drawable/button_radius"
+        android:backgroundTint="#F2F2F2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
