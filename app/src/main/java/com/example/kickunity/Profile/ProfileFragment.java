@@ -16,7 +16,7 @@ import android.widget.EditText;
 
 import com.example.kickunity.Auth.AuthApiService;
 import com.example.kickunity.Auth.CheckResponse;
-import com.example.kickunity.Auth.Login;
+import com.example.kickunity.Auth.LoginActivity;
 import com.example.kickunity.R;
 import com.example.kickunity.Auth.RetrofitClient;
 
@@ -35,24 +35,25 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Initialize UI elements
+        // UI 요소 초기화
         initializeUI(view);
 
-        // Get user details from SharedPreferences
+        // SharedPreferences에서 사용자 이메일과 토큰 가져오기
         String userEmail = getUserEmailFromSharedPreferences();
         String accessToken = getAccessTokenFromSharedPreferences();
 
         if (userEmail != null && accessToken != null) {
-            loadUserProfile(userEmail, accessToken); // Load user profile data
+            loadUserProfile(userEmail, accessToken); // 사용자 프로필 정보 로드
         } else {
-            Log.e(TAG, "User email or access token is missing.");
+            Log.e(TAG, "사용자 이메일 또는 액세스 토큰이 없습니다.");
         }
 
+        // 버튼 클릭 리스너 설정
         setupButtons();
         return view;
     }
 
-    // Initialize UI elements
+    // UI 요소 초기화
     private void initializeUI(View view) {
         textProfileName = view.findViewById(R.id.TextprofileName);
         textTeamInfo = view.findViewById(R.id.TextTeamInfo);
@@ -63,14 +64,14 @@ public class ProfileFragment extends Fragment {
         deleteAccountButton = view.findViewById(R.id.deleteAccountButton);
     }
 
-    // Setup button click listeners
+    // 버튼 클릭 리스너 설정
     private void setupButtons() {
         editProfileButton.setOnClickListener(v -> openProfileEditActivity());
-        logoutButton.setOnClickListener(v -> handleLogout());
+        logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());
         deleteAccountButton.setOnClickListener(v -> showPasswordDialog());
     }
 
-    // Open profile edit activity with user data
+    // 프로필 수정 화면 열기
     private void openProfileEditActivity() {
         Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
         intent.putExtra("userEmail", textEmail.getText().toString());
@@ -78,104 +79,123 @@ public class ProfileFragment extends Fragment {
         startActivity(intent);
     }
 
-    // Show password input dialog for account deletion
-    private void showPasswordDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Enter Password");
-
-        EditText input = new EditText(getContext());
-        builder.setView(input);
-
-        builder.setPositiveButton("Confirm", (dialog, which) -> {
-            String password = input.getText().toString().trim();
-            if (!password.isEmpty()) {
-                deleteAccount(getAccessTokenFromSharedPreferences(), password);
-            } else {
-                Toast.makeText(getActivity(), "Please enter a password.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
+    // 로그아웃 확인 다이얼로그 보여주기
+    private void showLogoutConfirmationDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("로그아웃")
+                .setMessage("정말 로그아웃 하시겠습니까?")
+                .setPositiveButton("확인", (dialog, which) -> handleLogout())
+                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
-    // Handle user logout
+    // 로그아웃 처리
     private void handleLogout() {
         String accessToken = getAccessTokenFromSharedPreferences();
 
         if (accessToken != null) {
             logout(accessToken);
         } else {
-            Log.e(TAG, "Access token is missing.");
+            Log.e(TAG, "액세스 토큰이 없습니다.");
             redirectToLoginScreen();
         }
     }
 
     private void logout(String accessToken) {
-        AuthApiService authApiService = RetrofitClient.getRetrofitInstance().create(AuthApiService.class);
+        // AuthApiService 인스턴스 생성
+        AuthApiService authApiService = RetrofitClient.getAuthApiService();
+
+        // 로그아웃 요청 보내기
         Call<Void> call = authApiService.logout("Bearer " + accessToken);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    // 로그아웃 성공 처리
                     clearSharedPreferences();
                     redirectToLoginScreen();
                 } else {
-                    Toast.makeText(getActivity(), "Logout failed.", Toast.LENGTH_SHORT).show();
+                    // 실패 응답 처리 (예: 500 서버 오류)
+                    Log.e(TAG, "로그아웃 실패. 응답 코드: " + response.code());
+                    Toast.makeText(getActivity(), "로그아웃 실패: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Logout request failed: " + t.getMessage());
-                Toast.makeText(getActivity(), "Logout failed.", Toast.LENGTH_SHORT).show();
+                // 네트워크 오류나 기타 실패 처리
+                Log.e(TAG, "로그아웃 요청 실패: " + t.getMessage());
+                Toast.makeText(getActivity(), "로그아웃 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
+    // 계정 삭제를 위한 비밀번호 입력 다이얼로그
+    private void showPasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("비밀번호 입력");
+
+        EditText input = new EditText(getContext());
+        builder.setView(input);
+
+        builder.setPositiveButton("확인", (dialog, which) -> {
+            String password = input.getText().toString().trim();
+            if (!password.isEmpty()) {
+                deleteAccount(getAccessTokenFromSharedPreferences(), password);
+            } else {
+                Toast.makeText(getActivity(), "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("취소", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    // 계정 삭제 요청
     private void deleteAccount(String token, String password) {
-        // Create a request object with the password
+        // 비밀번호를 포함한 요청 객체 생성
         DeleteMemberRequest request = new DeleteMemberRequest(password);
 
-        // Retrofit instance to make the request
+        // Retrofit 인스턴스 사용
         AuthApiService authApiService = RetrofitClient.getRetrofitInstance().create(AuthApiService.class);
 
-        // Send a PUT request to the server to delete the account
+        // 계정 삭제 요청
         Call<CheckResponse> call = authApiService.deleteAccount("Bearer " + token, request);
         call.enqueue(new Callback<CheckResponse>() {
             @Override
             public void onResponse(Call<CheckResponse> call, Response<CheckResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Successfully deleted the account
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     clearSharedPreferences();
                     redirectToLoginScreen();
                 } else {
-                    // Handle failure response
-                    Toast.makeText(getContext(), "Account deletion failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "계정 삭제 실패", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<CheckResponse> call, Throwable t) {
-                // Network or other errors
-                Toast.makeText(getContext(), "Error occurred: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "에러 발생: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    // SharedPreferences에서 사용자 정보 삭제
     private void clearSharedPreferences() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();
     }
 
+    // 로그인 화면으로 리다이렉트
     private void redirectToLoginScreen() {
-        Intent intent = new Intent(getActivity(), Login.class);
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
 
+    // 사용자 프로필 정보 로드
     private void loadUserProfile(String userEmail, String accessToken) {
         AuthApiService authApiService = RetrofitClient.getRetrofitInstance().create(AuthApiService.class);
         Call<MypageResponse> call = authApiService.getMyPageInfo("Bearer " + accessToken, userEmail);
@@ -186,17 +206,18 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     updateUI(response.body());
                 } else {
-                    Log.e(TAG, "Failed to load profile: " + response.code());
+                    Log.e(TAG, "프로필 로드 실패: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<MypageResponse> call, Throwable t) {
-                Log.e(TAG, "Failed to fetch profile: " + t.getMessage());
+                Log.e(TAG, "프로필 요청 실패: " + t.getMessage());
             }
         });
     }
 
+    // UI 업데이트
     private void updateUI(MypageResponse response) {
         textProfileName.setText(response.getName() != null ? response.getName() : "");
         textTeamInfo.setText(response.getTeam() != null ? response.getTeam() : "");
@@ -204,11 +225,13 @@ public class ProfileFragment extends Fragment {
         textBirthdate.setText(response.getBirth() != null ? response.getBirth() : "");
     }
 
+    // SharedPreferences에서 이메일 가져오기
     private String getUserEmailFromSharedPreferences() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE);
         return sharedPreferences.getString("userEmail", null);
     }
 
+    // SharedPreferences에서 액세스 토큰 가져오기
     private String getAccessTokenFromSharedPreferences() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE);
         return sharedPreferences.getString("accessToken", null);

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,6 +50,10 @@ public class TeamSearchActivity extends AppCompatActivity {
 
         // 검색 필드 이벤트 처리
         setupSearchListener();
+
+        // 뒤로 가기 버튼 설정
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> finish()); // 액티비티 종료
     }
 
     // 검색 필드에서 입력 후 검색 실행

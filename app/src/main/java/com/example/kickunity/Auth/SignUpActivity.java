@@ -142,7 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
                     showToast("회원가입 성공! 회원 ID: " + memberId);
 
                     // 회원가입 후, 이전 액티비티 모두 종료하고 MainActivity로 이동
-                    Intent intent = new Intent(SignUpActivity.this, Login.class);
+                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // 모든 액티비티 종료
                     startActivity(intent);
                     finish();  // 현재 액티비티 종료

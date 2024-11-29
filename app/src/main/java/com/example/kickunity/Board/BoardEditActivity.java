@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditActivity extends AppCompatActivity {
+public class BoardEditActivity extends AppCompatActivity {
 
     private BoardApiService boardApiService;
     private Long boardId;
@@ -65,13 +65,13 @@ public class EditActivity extends AppCompatActivity {
                     BoardDetailResponse boardDetail = response.body();
                     populateFields(boardDetail); // 텍스트 필드 및 스피너 채우기
                 } else {
-                    Toast.makeText(EditActivity.this, "게시글을 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BoardEditActivity.this, "게시글을 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<BoardDetailResponse> call, Throwable t) {
-                Toast.makeText(EditActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BoardEditActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -138,16 +138,16 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<BoardDetailResponse> call, Response<BoardDetailResponse> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(EditActivity.this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BoardEditActivity.this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show();
                     finish(); // 성공 후 액티비티 종료
                 } else {
-                    Toast.makeText(EditActivity.this, "수정 실패. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BoardEditActivity.this, "수정 실패. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<BoardDetailResponse> call, Throwable t) {
-                Toast.makeText(EditActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BoardEditActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

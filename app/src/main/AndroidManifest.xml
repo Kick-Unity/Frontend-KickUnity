@@ -29,7 +29,7 @@
         </activity>
 
         <!-- 메인(시작) 액티비티 -->
-        <activity android:name=".Auth.Login"
+        <activity android:name=".Auth.LoginActivity"
             android:exported="true" />
 
         <!-- 이메일 인증 액티비티 -->
@@ -76,7 +76,31 @@
         <activity android:name=".Profile.PasswordModifyActivity"
             android:exported="true" />
 
-        <activity android:name=".Board.EditActivity"
+        <activity android:name=".Board.BoardEditActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.TeamEditActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.TeamNameModifyActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.AgeGroupModifyActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.FoundingYearModifyActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.RegionModifyActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.TeamCategoryModifyActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.TeamIntroductionModifyActivity"
+            android:exported="true" />
+
+        <activity android:name=".Team.TeamMemberModifyActivity"
             android:exported="true" />
 
 

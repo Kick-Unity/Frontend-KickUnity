@@ -1,6 +1,7 @@
 package com.example.kickunity.Auth;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,11 +19,21 @@ import com.example.kickunity.Chat.ChatFragment;
 import com.example.kickunity.Profile.ProfileFragment;
 import com.example.kickunity.R;
 import com.example.kickunity.Team.CreateTeamActivity;
+import com.example.kickunity.Team.TeamApiService;
 import com.example.kickunity.Team.TeamFragment;
 import com.example.kickunity.Team.TeamSearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -88,11 +99,8 @@ public class HomeActivity extends AppCompatActivity {
                 hideCardOptions(); // 카드 뷰 숨기기
                 fabTeamAction.hide(); // nav_home 선택 시 플로팅 버튼 숨기기
             } else if (id == R.id.nav_team) {
-                selectedFragment = new TeamFragment(); // TeamFragment 추가
-                fabCreatePost.hide(); // 기본 FAB 숨기기
-                showFabMain(); // 플로팅 버튼 보이기
-                toggleCardOptions(); // 카드 뷰 보이기
-            } else if (id == R.id.nav_chat) {
+                checkTeamStatus(); // 서버에서 팀 상태 확인
+            }  else if (id == R.id.nav_chat) {
                 selectedFragment = new ChatFragment(); // ChatFragment 추가
                 fabCreatePost.hide();
                 hideCardOptions(); // 카드 뷰 숨기기
@@ -124,6 +132,72 @@ public class HomeActivity extends AppCompatActivity {
         cardOption2.setOnClickListener(view -> {
             Intent intent = new Intent(HomeActivity.this, TeamSearchActivity.class);
             startActivity(intent); // SearchTeamActivity 열기
+        });
+    }
+
+    private void checkTeamStatus() {
+        // SharedPreferences에서 액세스 토큰을 가져옵니다.
+        String accessToken = getAccessTokenFromSharedPreferences();
+        if (accessToken == null) {
+            Toast.makeText(this, "토큰이 없어서 팀 상태를 확인할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Retrofit 객체 생성
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://15.165.133.129:8080/") // 서버 URL
+                .addConverterFactory(GsonConverterFactory.create()) // Gson 변환기 추가
+                .build();
+
+        // TeamApi 인터페이스 구현체 생성
+        TeamApiService teamApi = retrofit.create(TeamApiService.class);
+
+        // Authorization Header 생성
+        String authorizationHeader = "Bearer " + accessToken;
+
+        // 서버 요청
+        Call<Long> call = teamApi.getUserTeamStatus(authorizationHeader);
+
+        // 비동기 요청 처리
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                if (response.isSuccessful()) {
+                    Long teamId = response.body(); // Long 타입으로 응답 받음
+                    if (teamId != null) {
+                        // 팀 ID가 있는 경우
+                        Log.d("TeamStatus", "사용자의 팀 ID: " + teamId);
+
+                        // 팀 프래그먼트로 이동
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("teamId", teamId);
+                        TeamFragment teamFragment = new TeamFragment();
+                        teamFragment.setArguments(bundle);
+                        loadFragment(teamFragment);
+                    } else {
+                        // 팀 정보가 없을 경우
+                        Log.d("TeamStatus", "사용자는 소속된 팀이 없습니다.");
+                        showFabMain();
+                        toggleCardOptions();
+                    }
+                } else if (response.code() == 404) {
+                    // 사용자가 소속된 팀이 없는 경우
+                    Log.d("TeamStatus", "사용자는 소속된 팀이 없습니다.");
+                    showFabMain();
+                    toggleCardOptions();
+                } else {
+                    // 다른 오류 상황 처리
+                    Log.e("TeamStatus", "서버 응답 오류: " + response.code() + " - " + response.message());
+                    Toast.makeText(HomeActivity.this, "서버 오류가 발생했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                // 네트워크 오류 또는 예외 처리
+                Log.e("NetworkError", "네트워크 오류 발생", t);
+                Toast.makeText(HomeActivity.this, "네트워크 오류가 발생했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -159,9 +233,12 @@ public class HomeActivity extends AppCompatActivity {
         isCardVisible = false;
     }
 
+    // 프래그먼트를 로드하는 메서드
     private void loadFragment(Fragment fragment) {
+        // FragmentTransaction을 이용하여 프래그먼트를 교체
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
+        transaction.addToBackStack(null);  // 백스택에 추가하여 뒤로 가기 시 이전 프래그먼트로 돌아갈 수 있게 함
         transaction.commit();
     }
 
@@ -178,5 +255,16 @@ public class HomeActivity extends AppCompatActivity {
             postViewModel.addPost(title, content, category, time);
         }
     }
+
+    private String getAccessTokenFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth", MODE_PRIVATE);
+        String token = sharedPreferences.getString("accessToken", null);
+        if (token == null) {
+            // 토큰이 없으면 로그인 화면으로 이동하거나 예외 처리
+            Toast.makeText(this, "토큰이 없습니다. 다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+        }
+        return token;  // 토큰이 없으면 null 반환
+    }
+
 
 }

@@ -45,7 +45,7 @@ public interface AuthApiService {
     @POST("api/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("logout")
+    @POST("api/logout")
     Call<Void> logout(@Header("Authorization") String authorization);
 
     @POST("api/reissue")

@@ -18,7 +18,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin, buttonJoin, buttonFindPassword;
     private static final String TAG = "MainActivity";
@@ -48,7 +48,7 @@ public class Login extends AppCompatActivity {
             String password = editTextPassword.getText().toString().trim();
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(Login.this, "이메일과 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "이메일과 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -59,7 +59,7 @@ public class Login extends AppCompatActivity {
     private void setupJoinButton() {
         buttonJoin.setOnClickListener(v -> {
             // email_verification 이동
-            Intent intent = new Intent(Login.this, EmailVerificationActivity.class);
+            Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
             startActivity(intent);
         });
     }
@@ -67,7 +67,7 @@ public class Login extends AppCompatActivity {
     private void setupFindPassword() {
         buttonFindPassword.setOnClickListener(v -> {
             // FindPasswordActivity 이동
-            Intent intent = new Intent(Login.this, FindPasswordActivity.class);
+            Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
             startActivity(intent);
         });
     }
@@ -108,10 +108,10 @@ public class Login extends AppCompatActivity {
                     // 이메일도 SharedPreferences에 저장
                     saveUserEmail(email);
 
-                    Toast.makeText(Login.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
                     redirectToHome();
                 } else {
-                    Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -122,7 +122,7 @@ public class Login extends AppCompatActivity {
                 }
 
                 Log.e(TAG, "Network error: " + t.getMessage());
-                Toast.makeText(Login.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -144,7 +144,7 @@ public class Login extends AppCompatActivity {
 
 
     private void redirectToHome() {
-        Intent intent = new Intent(Login.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

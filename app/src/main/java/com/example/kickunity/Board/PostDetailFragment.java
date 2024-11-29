@@ -70,7 +70,7 @@ public class PostDetailFragment extends Fragment {
                 popupMenu.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == R.id.menu_edit) {
                         if (postId != null) { // postId가 null이 아닌지 확인
-                            Intent intent = new Intent(requireContext(), EditActivity.class);
+                            Intent intent = new Intent(requireContext(), BoardEditActivity.class);
                             intent.putExtra("boardId", postId); // 게시글 ID 전달
                             startActivity(intent);
                         } else {
