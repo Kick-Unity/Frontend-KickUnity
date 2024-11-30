@@ -87,18 +87,18 @@ public class TeamFragment extends Fragment {
             Log.e("TeamFragment", "팀 ID 또는 액세스 토큰이 없습니다.");
         }
 
-        // 버튼 클릭 리스너 설정
+        // 팀 검색 버튼 클릭 리스너에서 accessToken을 Intent로 넘깁니다.
         teamSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TeamSearchActivity로 이동하는 Intent 생성
                 Intent intent = new Intent(getContext(), TeamSearchActivity.class);
-                // 만약 teamId를 넘기고 싶다면:
-                intent.putExtra("teamId", teamId); // 팀 ID를 추가로 전달 (필요시)
-                // TeamSearchActivity로 이동
-                startActivity(intent);
+                intent.putExtra("teamId", teamId); // 팀 ID를 추가로 전달
+                intent.putExtra("accessToken", getAccessTokenFromSharedPreferences()); // accessToken을 추가로 전달
+                startActivity(intent);  // TeamSearchActivity로 이동
             }
         });
+
 
         editTeamButton.setOnClickListener(v -> openTeamEditActivity());
 

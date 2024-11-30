@@ -27,12 +27,12 @@
 
             <TextView
                 android:id="@+id/teamNameText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Team"
                 android:paddingTop="15dp"
                 android:paddingLeft="20dp"
-                android:textSize="21dp"
+                android:textSize="18dp"
                 android:textColor="#393E46"
                 android:textStyle="bold" />
 

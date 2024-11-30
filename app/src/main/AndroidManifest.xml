@@ -103,6 +103,10 @@
         <activity android:name=".Team.TeamMemberModifyActivity"
             android:exported="true" />
 
+        <activity android:name=".Team.TeamDetailActivity"
+            android:exported="true" />
+
+
 
     </application>
 </manifest>

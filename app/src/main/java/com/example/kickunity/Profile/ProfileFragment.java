@@ -2,11 +2,14 @@ package com.example.kickunity.Profile;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -79,13 +82,14 @@ public class ProfileFragment extends Fragment {
         startActivity(intent);
     }
 
-    // 로그아웃 확인 다이얼로그 보여주기
+    // 로그아웃 확인 다이얼로그
     private void showLogoutConfirmationDialog() {
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(requireContext())
                 .setTitle("로그아웃")
                 .setMessage("정말 로그아웃 하시겠습니까?")
                 .setPositiveButton("확인", (dialog, which) -> handleLogout())
                 .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                .setCancelable(false) // 다이얼로그 외부 터치 시 닫히지 않도록 설정
                 .show();
     }
 
@@ -131,27 +135,57 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-
-    // 계정 삭제를 위한 비밀번호 입력 다이얼로그
     private void showPasswordDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("비밀번호 입력");
+        // Fragment에서 getContext()를 사용하여 Context 얻기
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-        EditText input = new EditText(getContext());
-        builder.setView(input);
+        // 다이얼로그 제목 설정
+        builder.setTitle("비밀번호 입력")
+                .setMessage("계정을 삭제하려면 비밀번호를 입력하세요.");
 
+        // 비밀번호 입력을 위한 EditText 생성
+        final EditText input = new EditText(requireContext());
+        input.setHint("비밀번호를 입력하세요");
+        input.setHintTextColor(Color.parseColor("#757575")); // 회색 (#757575)
+        input.setTextColor(Color.BLACK); // 텍스트 색상 설정 (검정색)
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); // 비밀번호 입력 필드
+        input.setPadding(40, 30, 40, 30); // 내부 여백 추가
+        input.setBackgroundResource(R.drawable.edittext_background); // 배경을 설정 (뒤에서 정의한 drawable)
+
+        // 레이아웃 설정
+        LinearLayout layout = new LinearLayout(requireContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 0, 50, 20); // 다이얼로그의 양옆 여백 설정
+        layout.addView(input);
+
+        // 다이얼로그에 레이아웃 적용
+        builder.setView(layout);
+
+        // "확인" 버튼 클릭 리스너
         builder.setPositiveButton("확인", (dialog, which) -> {
             String password = input.getText().toString().trim();
             if (!password.isEmpty()) {
-                deleteAccount(getAccessTokenFromSharedPreferences(), password);
+                deleteAccount(getAccessTokenFromSharedPreferences(), password); // 계정 삭제 함수 호출
             } else {
-                Toast.makeText(getActivity(), "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
             }
         });
 
+        // "취소" 버튼 클릭 리스너
         builder.setNegativeButton("취소", (dialog, which) -> dialog.cancel());
-        builder.show();
+
+        // 다이얼로그 생성
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // 버튼 스타일 설정
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setTextColor(Color.parseColor("#FF0000")); // 삭제 버튼 텍스트 색상 변경 (빨간색)
+
+        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(Color.parseColor("#000000")); // 취소 버튼 텍스트 색상 변경 (검정색)
     }
+
 
     // 계정 삭제 요청
     private void deleteAccount(String token, String password) {

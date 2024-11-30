@@ -50,5 +50,13 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.8.0")
     implementation ("com.squareup.retrofit2:retrofit:2.8.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.8.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")  // OkHttp 라이브러리 추가
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")  // HttpLoggingInterceptor 추가
 
+    // SwipeRefreshLayout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.15.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.0")
 }
