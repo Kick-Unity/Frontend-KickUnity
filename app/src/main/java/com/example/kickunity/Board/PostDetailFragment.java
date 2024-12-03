@@ -4,9 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -16,23 +18,25 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.kickunity.Auth.RetrofitClient;
+import com.example.kickunity.Chat.ChatApiService;
+import com.example.kickunity.Chat.ChatRoomActivity;
+import com.example.kickunity.Chat.ChatRoomDTO;
 import com.example.kickunity.R;
-import com.example.kickunity.Auth.RetrofitClient; // RetrofitClient 임포트
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import android.util.Log; // Log 임포트
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PostDetailFragment extends Fragment {
 
     private BoardApiService boardApiService;
+    private ChatApiService chatApiService; // ChatApiService 추가
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class PostDetailFragment extends Fragment {
 
         // RetrofitClient를 사용하여 BoardApiService 인스턴스 초기화
         boardApiService = RetrofitClient.getBoardApiService();
+        chatApiService = RetrofitClient.getChatApiService(); // ChatApiService 초기화
 
         // 뒤로 가기 버튼 설정
         ImageButton backButton = view.findViewById(R.id.backButton);
@@ -91,6 +96,14 @@ public class PostDetailFragment extends Fragment {
 
                 // 메뉴 표시
                 popupMenu.show();
+            });
+
+            // 채팅방 생성 버튼 클릭 시
+            Button chatButton = view.findViewById(R.id.postdetail_chatButton); // 채팅 버튼
+            chatButton.setOnClickListener(v -> {
+                if (postId != null) {
+                    createChatRoom(postId); // 채팅방 생성 메서드 호출
+                }
             });
         }
         return view;
@@ -176,6 +189,48 @@ public class PostDetailFragment extends Fragment {
         }
     }
 
+    private void createChatRoom(Long boardId) {
+        // 현재 로그인된 사용자의 ID를 SharedPreferences에서 가져옴
+        String accessToken = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE).getString("accessToken", null);
+        if (accessToken == null) {
+            Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Authorization 헤더 설정
+        String authorizationHeader = "Bearer " + accessToken;
+
+        // 서버에서 채팅방 생성 요청 후
+        chatApiService.createChatRoom(authorizationHeader, boardId).enqueue(new Callback<ChatRoomDTO>() {
+            @Override
+            public void onResponse(Call<ChatRoomDTO> call, Response<ChatRoomDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ChatRoomDTO chatRoom = response.body();
+
+                    // ChatRoomDTO 로그 출력
+                    Log.d("ChatRoomCreation", "roomId: " + chatRoom.getRoomId());
+                    Log.d("ChatRoomCreation", "Current User: " + chatRoom.getcurrentUser());
+                    Log.d("ChatRoomCreation", "Other User: " + chatRoom.getotherUser());
+
+                    // 채팅방 정보가 올바르면 Intent로 전달
+                    Intent intent = new Intent(getContext(), ChatRoomActivity.class);
+                    intent.putExtra("chatRoom", chatRoom); // ChatRoomDTO 객체 전달
+
+                    startActivity(intent);
+                } else {
+                    Log.e("ChatRoomCreation", "Failed to create chat room. Response code: " + response.code());
+                    Toast.makeText(getContext(), "채팅방 생성 실패.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChatRoomDTO> call, Throwable t) {
+                Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     // 게시글 삭제 확인 다이얼로그
     private void confirmDeletePost(Long postId) {
         new AlertDialog.Builder(getContext())
@@ -191,33 +246,42 @@ public class PostDetailFragment extends Fragment {
                 .show();
     }
 
-    // 게시글 삭제 메서드
     private void deletePost(Long postId) {
         String accessToken = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE).getString("accessToken", null);
 
         if (accessToken == null) {
+            Log.e("DeletePost", "Access token is null. User may not be logged in.");
             Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String authorizationHeader = "Bearer " + accessToken;
 
+        // 로그 추가
+        Log.d("DeletePost", "Authorization Header: " + authorizationHeader);
+        Log.d("DeletePost", "Post ID to delete: " + postId);
+
         // 서버에 게시글 삭제 요청
         boardApiService.deleteBoard(authorizationHeader, postId).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    Log.d("DeletePost", "Post successfully deleted. Response code: " + response.code());
                     Toast.makeText(getContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                    requireActivity().getSupportFragmentManager().popBackStack(); // 삭제 후 이전 화면으로 돌아가기
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 } else {
+                    Log.e("DeletePost", "Failed to delete post. Response code: " + response.code());
+                    Log.e("DeletePost", "Error body: " + response.errorBody());
                     Toast.makeText(getContext(), "게시글 삭제 실패. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("DeletePost", "Network error: " + t.getMessage(), t);
                 Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

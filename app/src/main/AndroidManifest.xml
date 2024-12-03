@@ -106,6 +106,9 @@
         <activity android:name=".Team.TeamDetailActivity"
             android:exported="true" />
 
+        <activity android:name=".Chat.ChatRoomActivity"
+            android:exported="true" />
+
 
 
     </application>

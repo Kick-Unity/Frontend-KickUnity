@@ -42,12 +42,13 @@ public interface AuthApiService {
     @PUT("api/member/deleteMember")
     Call<CheckResponse> deleteAccount(@Header("Authorization") String authorization, @Body DeleteMemberRequest request);
 
-    @POST("api/login")
+    @POST("/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("api/logout")
-    Call<Void> logout(@Header("Authorization") String authorization);
+    @POST("/logout")
+    Call<Void> logout(@Header("Cookie") String cookieHeader);  // 쿠키 헤더를 받아서 로그아웃 요청
 
     @POST("api/reissue")
-    Call<RefreshTokenResponse> reissueAccessToken(@Header("Authorization") String refreshToken);
+    Call<Void> reissueAccessToken(@Header("Authorization") String refreshToken);
+
 }

@@ -111,6 +111,8 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
                     redirectToHome();
                 } else {
+                    // 응답 실패 시 로그 찍기
+                    Log.e(TAG, "로그인 실패: " + response.code() + " " + response.message());
                     Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -121,11 +123,13 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
 
+                // 실패 시 로그 찍기
                 Log.e(TAG, "Network error: " + t.getMessage());
                 Toast.makeText(LoginActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private void saveTokens(String accessToken, String refreshToken) {
         getSharedPreferences("auth", MODE_PRIVATE)

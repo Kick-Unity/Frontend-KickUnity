@@ -20,6 +20,7 @@ import android.widget.EditText;
 import com.example.kickunity.Auth.AuthApiService;
 import com.example.kickunity.Auth.CheckResponse;
 import com.example.kickunity.Auth.LoginActivity;
+import com.example.kickunity.Auth.LogoutHelper;
 import com.example.kickunity.R;
 import com.example.kickunity.Auth.RetrofitClient;
 
@@ -95,46 +96,28 @@ public class ProfileFragment extends Fragment {
 
     // 로그아웃 처리
     private void handleLogout() {
-        String accessToken = getAccessTokenFromSharedPreferences();
+        // SharedPreferences에서 refresh 토큰을 가져옵니다.
+        String refreshToken = getRefreshTokenFromSharedPreferences();
+        if (refreshToken != null) {
+            // 쿠키에 refresh 토큰을 추가하여 로그아웃 요청
+            String cookieHeader = "refresh=" + refreshToken; // refresh 토큰을 쿠키 형식으로 추가
+            LogoutHelper.logout(getActivity(), cookieHeader);  // 로그아웃 헬퍼 메소드 호출
 
-        if (accessToken != null) {
-            logout(accessToken);
-        } else {
-            Log.e(TAG, "액세스 토큰이 없습니다.");
+            // 로그아웃 후 로그인 화면으로 리다이렉트
             redirectToLoginScreen();
+        } else {
+            Toast.makeText(getContext(), "로그아웃 실패: refresh 토큰을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void logout(String accessToken) {
-        // AuthApiService 인스턴스 생성
-        AuthApiService authApiService = RetrofitClient.getAuthApiService();
-
-        // 로그아웃 요청 보내기
-        Call<Void> call = authApiService.logout("Bearer " + accessToken);
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    // 로그아웃 성공 처리
-                    clearSharedPreferences();
-                    redirectToLoginScreen();
-                } else {
-                    // 실패 응답 처리 (예: 500 서버 오류)
-                    Log.e(TAG, "로그아웃 실패. 응답 코드: " + response.code());
-                    Toast.makeText(getActivity(), "로그아웃 실패: " + response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                // 네트워크 오류나 기타 실패 처리
-                Log.e(TAG, "로그아웃 요청 실패: " + t.getMessage());
-                Toast.makeText(getActivity(), "로그아웃 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    // 로그인 화면으로 리다이렉트
+    private void redirectToLoginScreen() {
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();  // 현재 Activity 종료
     }
 
+    // 비밀번호 입력 다이얼로그
     private void showPasswordDialog() {
         // Fragment에서 getContext()를 사용하여 Context 얻기
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -183,9 +166,8 @@ public class ProfileFragment extends Fragment {
         positiveButton.setTextColor(Color.parseColor("#FF0000")); // 삭제 버튼 텍스트 색상 변경 (빨간색)
 
         Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-        negativeButton.setTextColor(Color.parseColor("#000000")); // 취소 버튼 텍스트 색상 변경 (검정색)
+        negativeButton.setTextColor(Color.parseColor("#FFFFFF")); // 취소 버튼 텍스트 색상 변경 (검정색)
     }
-
 
     // 계정 삭제 요청
     private void deleteAccount(String token, String password) {
@@ -220,13 +202,6 @@ public class ProfileFragment extends Fragment {
     private void clearSharedPreferences() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();
-    }
-
-    // 로그인 화면으로 리다이렉트
-    private void redirectToLoginScreen() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 
     // 사용자 프로필 정보 로드
@@ -269,5 +244,11 @@ public class ProfileFragment extends Fragment {
     private String getAccessTokenFromSharedPreferences() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE);
         return sharedPreferences.getString("accessToken", null);
+    }
+
+    // SharedPreferences에서 리프레시 토큰 가져오기
+    private String getRefreshTokenFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("auth", getContext().MODE_PRIVATE);
+        return sharedPreferences.getString("refreshToken", null);
     }
 }

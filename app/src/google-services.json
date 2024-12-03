@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "496188561286",
+    "project_id": "kickunity-c117b",
+    "storage_bucket": "kickunity-c117b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496188561286:android:689800a5e5cf46be7fbe07",
+        "android_client_info": {
+          "package_name": "com.example.kickunity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuc8emoVVJMnkFH113vIKEJz93BWjJpkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

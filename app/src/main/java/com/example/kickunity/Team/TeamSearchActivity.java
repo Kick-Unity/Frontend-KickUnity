@@ -1,11 +1,9 @@
 package com.example.kickunity.Team;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,7 +31,6 @@ public class TeamSearchActivity extends AppCompatActivity {
     private TeamAdapter adapter;
     private TeamApiService teamApiService;
 
-    // 액세스 토큰을 담을 변수
     private String accessToken;
 
     @Override
@@ -54,18 +51,11 @@ public class TeamSearchActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // 아이템 클릭 리스너와 가입 요청 리스너 설정
-        adapter = new TeamAdapter(
-                teamId -> {
-                    // 가입 요청 버튼 클릭 시 처리
-                    // 여기는 주석 처리하여 기능을 비활성화 합니다.
-                    // Toast.makeText(this, "팀 " + teamId + "에 가입 요청", Toast.LENGTH_SHORT).show();
-                },
-                teamId -> {
-                    // 팀 아이템 클릭 시 상세 페이지로 이동
-                    openTeamDetailActivity(teamId);
-                }
-        );
+        // 팀 상세 페이지로 이동하는 리스너 정의
+        adapter = new TeamAdapter(teamId -> {
+            // 버튼 클릭 시 팀 상세 페이지로 이동
+            openTeamDetailActivity(teamId);
+        });
         recyclerView.setAdapter(adapter);
 
         // API 서비스 초기화
@@ -189,13 +179,12 @@ public class TeamSearchActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    // TeamSearchActivity에서
+    // TeamDetailActivity로 이동
     private void openTeamDetailActivity(long teamId) {
         if (accessToken != null) {
             Intent intent = new Intent(TeamSearchActivity.this, TeamDetailActivity.class);
-            intent.putExtra("teamId", teamId); // teamId를 Intent에 추가
+            intent.putExtra("teamId", teamId);  // teamId를 Intent에 추가
             intent.putExtra("accessToken", accessToken); // accessToken을 함께 전달
-            Log.d(TAG, "openTeamDetailActivity 호출: teamId = " + teamId + ", accessToken = " + accessToken); // 디버깅 로그 추가
             startActivity(intent);  // TeamDetailActivity로 이동
         } else {
             showToast("액세스 토큰이 없습니다. 다시 로그인 해주세요.");
