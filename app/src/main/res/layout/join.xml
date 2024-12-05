@@ -131,6 +131,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:inputType="textPassword"
+        android:textSize="13dp"
         android:background="@drawable/rounded_corner"
         app:layout_constraintTop_toBottomOf="@id/password_CheckLabel"
         app:layout_constraintStart_toStartOf="parent"

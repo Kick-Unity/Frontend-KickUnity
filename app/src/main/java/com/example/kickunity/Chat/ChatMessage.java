@@ -1,20 +1,27 @@
 package com.example.kickunity.Chat;
 
-import com.example.kickunity.Chat.MessageType;
-
 public class ChatMessage {
     private Long chatRoomId;
+    private Long senderId;
     private String message;
-    private MessageType messageType;
-    private Long senderId;  // 추가된 필드 (현재 사용자 ID)
+    private String messageType;
 
-    // Getter 및 Setter
+    // Getter and Setter methods
+
     public Long getChatRoomId() {
         return chatRoomId;
     }
 
     public void setChatRoomId(Long chatRoomId) {
         this.chatRoomId = chatRoomId;
+    }
+
+    public Long getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
     public String getMessage() {
@@ -25,19 +32,11 @@ public class ChatMessage {
         this.message = message;
     }
 
-    public MessageType getMessageType() {
+    public String getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(MessageType messageType) {
+    public void setMessageType(String messageType) {
         this.messageType = messageType;
-    }
-
-    public Long getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
     }
 }

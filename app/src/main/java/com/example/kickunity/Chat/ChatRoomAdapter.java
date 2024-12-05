@@ -16,17 +16,19 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_SENDER = 0;
     private static final int TYPE_RECEIVER = 1;
 
-    private List<ChatMessage> chatMessages;
+    private List<ChatMessageUI> chatMessages;  // List 타입을 ChatMessageUI로 변경
     private Long currentUserId;
+    private RecyclerView recyclerView;  // RecyclerView 추가
 
-    public ChatRoomAdapter(List<ChatMessage> chatMessages, Long currentUserId) {
+    public ChatRoomAdapter(List<ChatMessageUI> chatMessages, Long currentUserId, RecyclerView recyclerView) {
         this.chatMessages = chatMessages;
         this.currentUserId = currentUserId;
+        this.recyclerView = recyclerView;  // RecyclerView 초기화
     }
 
     @Override
     public int getItemViewType(int position) {
-        ChatMessage chatMessage = chatMessages.get(position);
+        ChatMessageUI chatMessage = chatMessages.get(position);
         // 발신자가 현재 사용자 ID와 일치하는지 확인하여 메시지 유형을 결정
         if (chatMessage.getSenderId().equals(currentUserId)) {
             return TYPE_SENDER;  // 본인이 보낸 메시지
@@ -48,7 +50,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ChatMessage chatMessage = chatMessages.get(position);
+        ChatMessageUI chatMessage = chatMessages.get(position);
 
         if (holder instanceof SenderViewHolder) {
             ((SenderViewHolder) holder).bind(chatMessage);
@@ -73,7 +75,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             senderTime = itemView.findViewById(R.id.sender_time);
         }
 
-        public void bind(ChatMessage chatMessage) {
+        public void bind(ChatMessageUI chatMessage) {
             senderContent.setText(chatMessage.getMessage());
             senderTime.setText(chatMessage.getTime());  // 메시지 발송 시간 처리 추가
         }
@@ -92,27 +94,28 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             receiverTime = itemView.findViewById(R.id.receiver_time);
         }
 
-        public void bind(ChatMessage chatMessage) {
-            receiverName.setText(chatMessage.getSender());  // 수신자의 이름을 표시 (또는 이메일)
+        public void bind(ChatMessageUI chatMessage) {
+            receiverName.setText(chatMessage.getSender());  // 수신자의 이름을 표시 (혹은 이메일)
             receiverContent.setText(chatMessage.getMessage());
             receiverTime.setText(chatMessage.getTime());  // 메시지 발송 시간 처리 추가
         }
     }
 
-    // ChatMessage 모델
-    public static class ChatMessage {
-        private Long senderId;  // 발신자의 ID
-        private String sender;  // 발신자의 이름 (혹은 이메일)
-        private String message; // 메시지 내용
-        private String time;    // 메시지 보낸 시간
+    // UI 관련 메시지 클래스 (RecyclerView에서 사용)
+    public static class ChatMessageUI {
+        private Long senderId;
+        private String sender;
+        private String message;
+        private String time;
 
-        public ChatMessage(Long senderId, String sender, String message, String time) {
+        public ChatMessageUI(Long senderId, String sender, String message, String time) {
             this.senderId = senderId;
             this.sender = sender;
             this.message = message;
             this.time = time;
         }
 
+        // Getter 및 Setter
         public Long getSenderId() {
             return senderId;
         }
@@ -130,9 +133,25 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    // 메시지 추가 메소드
+    // 이전 메시지를 RecyclerView 맨 위에 추가하는 메서드
+    public void addMessagesAtStart(List<ChatMessageUI> messages) {
+        chatMessages.addAll(0, messages);  // 새 메시지 목록을 기존 목록 앞에 추가
+        notifyItemRangeInserted(0, messages.size());  // 새 메시지들 추가 후 RecyclerView 갱신
+    }
+
     public void addMessage(Long senderId, String sender, String message, String time) {
-        chatMessages.add(new ChatMessage(senderId, sender, message, time));
-        notifyItemInserted(chatMessages.size() - 1);  // 마지막에 추가된 메시지를 RecyclerView에 반영
+        // 새로운 메시지를 추가
+        chatMessages.add(new ChatMessageUI(senderId, sender, message, time));
+        notifyItemInserted(chatMessages.size() - 1);  // 새로운 메시지 위치에 추가 후 갱신
+
+        // RecyclerView의 마지막 항목으로 자동 스크롤
+        recyclerView.scrollToPosition(chatMessages.size() - 1);  // 최신 메시지로 스크롤
+    }
+
+    // 메시지 목록을 업데이트하는 메서드
+    public void updateMessages(List<ChatMessageUI> newMessages) {
+        chatMessages.clear();  // 기존 메시지 목록을 비우고
+        chatMessages.addAll(newMessages);  // 새로운 메시지 목록 추가
+        notifyDataSetChanged();  // RecyclerView 갱신
     }
 }

@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -65,21 +64,4 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.15.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.0")
 
-    // Firebase BOM 의존성 관리
-    implementation("com.google.firebase:firebase-bom:33.6.0")
-
-    // Firebase Analytics
-    implementation("com.google.firebase:firebase-analytics-ktx:22.1.2")
-
-    // Firebase Authentication (로그인 기능 추가)
-    implementation("com.google.firebase:firebase-auth-ktx:21.0.5")
-
-    // Firebase Firestore (실시간 데이터베이스 연동)
-    implementation("com.google.firebase:firebase-firestore-ktx:24.0.0")
-
-    // Firebase Realtime Database (사용시 추가)
-    implementation("com.google.firebase:firebase-database-ktx:20.0.5")
-
-    // Firebase Cloud Messaging (푸시 알림 기능 추가)
-    implementation("com.google.firebase:firebase-messaging-ktx:23.0.0")
 }

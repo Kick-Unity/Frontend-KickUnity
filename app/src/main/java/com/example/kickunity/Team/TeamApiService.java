@@ -14,11 +14,21 @@ public interface TeamApiService {
     @POST("api/team/create")
     Call<Long> createTeam(@Header("Authorization") String token, @Body AddTeamRequest request);
 
-    @POST("api/team/{teamId}/addMember")
-    Call<String> addMember(@Header("Authorization") String token, @Path("teamId") Long teamId, @Path("memberEmail") String memberEmail);
+    // 팀원 추가
+    @POST("api/team/{teamId}/addMember/{memberEmail}")
+    Call<String> addMember(
+            @Header("Authorization") String authorizationHeader,
+            @Path("teamId") Long teamId,
+            @Path("memberEmail") String memberEmail // Email as query parameter
+    );
 
-    @DELETE("api/team/{teamId}/removeMember/{memberId}")
-    Call<String> removeMember(@Header("Authorization") String token, @Path("teamId") Long teamId, @Path("memberEmail") String memberEmail);
+    // 팀원 삭제
+    @DELETE("api/team/{teamId}/removeMember/{memberEmail}")
+    Call<String> removeMember(
+            @Header("Authorization") String authorizationHeader,
+            @Path("teamId") Long teamId,
+            @Path("memberEmail") String memberEmail // Email as query parameter
+    );
 
     @DELETE("api/team/{teamId}")
     Call<String> deleteTeam(@Header("Authorization") String token, @Path("teamId") Long teamId);

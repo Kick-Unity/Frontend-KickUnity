@@ -129,11 +129,31 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent); // CreateTeamActivity 열기
         });
 
-        cardOption2.setOnClickListener(view -> {
-            Intent intent = new Intent(HomeActivity.this, TeamSearchActivity.class);
-            startActivity(intent); // SearchTeamActivity 열기
+        // 카드옵션 2 클릭 시
+        cardOption2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 팀 ID는 checkTeamStatus()에서 받아온 teamId 값을 사용해야 합니다.
+                Long teamId = getTeamIdFromSharedPreferences(); // 또는 다른 방법으로 teamId를 가져옵니다.
+
+                if (teamId != null) {
+                    // TeamSearchActivity로 이동하는 Intent 생성
+                    Intent intent = new Intent(HomeActivity.this, TeamSearchActivity.class);
+                    intent.putExtra("teamId", teamId);  // 팀 ID를 추가로 전달
+                    intent.putExtra("accessToken", getAccessTokenFromSharedPreferences());  // SharedPreferences에서 액세스 토큰 가져오기
+                    startActivity(intent);  // TeamSearchActivity로 이동
+                } else {
+                    Toast.makeText(HomeActivity.this, "팀 ID가 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
+
+    private Long getTeamIdFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("team", MODE_PRIVATE);
+        return sharedPreferences.getLong("teamId", -1);  // -1은 기본값
+    }
+
 
     private void checkTeamStatus() {
         // SharedPreferences에서 액세스 토큰을 가져옵니다.

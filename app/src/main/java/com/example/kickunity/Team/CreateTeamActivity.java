@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,15 @@ public class CreateTeamActivity extends AppCompatActivity {
         teamDescriptionInput = findViewById(R.id.teamDescriptionInput);
 
         teamApiService = RetrofitClient.getTeamApiService();
+
+        // 뒤로가기 버튼 클릭 리스너 추가
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();  // 뒤로가기 버튼을 클릭하면 이전 화면으로 돌아감
+            }
+        });
     }
 
     public void registerTeam(View view) {

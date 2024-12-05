@@ -109,6 +109,9 @@
         <activity android:name=".Chat.ChatRoomActivity"
             android:exported="true" />
 
+        <activity android:name=".Chat.ChatRoomDetailsActivity"
+            android:exported="true" />
+
 
 
     </application>

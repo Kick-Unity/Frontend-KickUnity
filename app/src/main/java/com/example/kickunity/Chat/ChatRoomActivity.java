@@ -42,48 +42,44 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
 
-        // 뒤로 가기 버튼 설정
+        // Back button
         ImageButton backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            finish(); // 현재 Activity 종료
-        });
+        backButton.setOnClickListener(v -> finish());
 
-        // RecyclerView 및 UI 요소 초기화
+        // Initialize RecyclerView and UI components
         chatRecyclerView = findViewById(R.id.chat_recycler);
         messageInput = findViewById(R.id.chat_ET);
         sendButton = findViewById(R.id.chat_send_btn);
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // 채팅방 초기화 및 currentUserId 설정
+        // Initialize ChatRoom and currentUserId
         initializeChatRoom();
 
-        // currentUserId가 초기화된 후 ChatRoomAdapter 생성
-        chatRoomAdapter = new ChatRoomAdapter(new ArrayList<>(), currentUserId);  // currentUserId 추가
+        chatRoomAdapter = new ChatRoomAdapter(new ArrayList<>(), currentUserId, chatRecyclerView);
         chatRecyclerView.setAdapter(chatRoomAdapter);
 
-        // OkHttpClient 초기화
+        // Initialize WebSocket connection
         client = new OkHttpClient();
-
-        // WebSocket 연결 시도
         if (chatRoomId != null && client != null) {
             connectToWebSocket();
         } else {
-            Log.e("ChatRoomActivity", "client 또는 chatRoomId가 null입니다. WebSocket 연결을 중단합니다.");
-            Toast.makeText(this, "채팅방 정보가 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
+            Log.e("ChatRoomActivity", "Client or chatRoomId is null, stopping WebSocket connection.");
+            Toast.makeText(this, "Invalid chat room information.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
+        // Send message on button click
         sendButton.setOnClickListener(v -> sendMessage());
     }
 
     private void initializeChatRoom() {
-        // Intent로부터 데이터 가져오기
+        // Retrieve chat room data from Intent
         ChatRoomDTO currentChatRoom = (ChatRoomDTO) getIntent().getSerializableExtra("chatRoom");
 
         if (currentChatRoom == null) {
-            Log.e("ChatRoomActivity", "currentChatRoom이 null입니다.");
-            Toast.makeText(this, "채팅방 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+            Log.e("ChatRoomActivity", "currentChatRoom is null.");
+            Toast.makeText(this, "Failed to retrieve chat room information.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -93,153 +89,131 @@ public class ChatRoomActivity extends AppCompatActivity {
         ChatRoomDTO.MemberDTO otherUser = currentChatRoom.getotherUser();
 
         if (chatRoomId == null || currentUser == null || otherUser == null) {
-            Log.e("ChatRoomActivity", "유효하지 않은 채팅방 정보입니다.");
-            Toast.makeText(this, "유효하지 않은 채팅방 정보입니다.", Toast.LENGTH_SHORT).show();
+            Log.e("ChatRoomActivity", "Invalid chat room information.");
+            Toast.makeText(this, "Invalid chat room information.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         currentUserId = currentUser.getId();
-
-        Log.d("ChatRoomActivity", "chatRoomId: " + chatRoomId);
-        Log.d("ChatRoomActivity", "Current User: " + currentUser.getId());
-        Log.d("ChatRoomActivity", "Other User: " + otherUser.getId());
     }
 
     private void connectToWebSocket() {
         if (client == null) {
-            Log.e("ChatRoomActivity", "OkHttpClient가 초기화되지 않았습니다.");
+            Log.e("ChatRoomActivity", "OkHttpClient is not initialized.");
             return;
         }
 
-        String url = "ws://15.165.133.129:8080/ws/conn"; // 서버 주소
+        String url = "ws://15.165.133.129:8080/ws/conn";
         try {
             URI uri = new URI(url + "?chatRoomId=" + chatRoomId);
-
             Log.d("ChatRoomActivity", "Connecting to WebSocket with URL: " + uri.toString());
             Log.d("ChatRoomActivity", "Authorization Token: " + getToken());
 
             Request request = new Request.Builder()
                     .url(uri.toString())
-                    .addHeader("Authorization", "Bearer " + getToken())
+                    .addHeader("Authorization", "Bearer " + getToken()) // Add Authorization header
                     .build();
 
             webSocket = client.newWebSocket(request, new WebSocketListener() {
                 @Override
                 public void onOpen(WebSocket webSocket, Response response) {
                     Log.d("WebSocket", "WebSocket opened");
-                    sendJoinMessage();  // 채팅방에 참여하는 메시지를 보냄
                 }
 
                 @Override
                 public void onMessage(WebSocket webSocket, String text) {
-                    try {
-                        // 수신된 메시지가 JSON 형식인지 확인
-                        if (isJsonValid(text)) {
-                            JSONObject jsonMessage = new JSONObject(text);
-                            // 예시: WebSocket 메시지를 수신한 후, addMessage() 호출
-                            String senderId = jsonMessage.getString("senderId");
-                            String senderName = jsonMessage.getString("senderName");  // senderName을 적절히 받기
-                            String message = jsonMessage.getString("message");
-                            String time = getCurrentTime();
-
-                            // addMessage() 호출
-                            runOnUiThread(() -> chatRoomAdapter.addMessage(Long.parseLong(senderId), senderName, message, time));
-                        } else {
-                            Log.d("ChatRoomActivity", "Received non-JSON message: " + text);
-                            runOnUiThread(() -> {
-                                Toast.makeText(ChatRoomActivity.this, "서버 메시지: " + text, Toast.LENGTH_SHORT).show();
-                            });
-                        }
-                    } catch (JSONException e) {
-                        Log.e("ChatRoomActivity", "수신 메시지 처리 오류: " + e.getMessage());
-                    }
-                }
-
-                private boolean isJsonValid(String text) {
-                    try {
-                        new JSONObject(text);
-                        return true;
-                    } catch (JSONException ex) {
-                        return false;
-                    }
+                    Log.d("WebSocket", "Message received: " + text);
+                    handleWebSocketMessage(text);
                 }
 
                 @Override
                 public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                    Log.e("WebSocket", "Error: " + t.getMessage(), t);
+                    Log.e("WebSocket", "Connection failed: " + t.getMessage(), t);
+                    if (response != null) {
+                        Log.e("WebSocket", "Failure Response: " + response.toString());
+                    }
                 }
 
                 @Override
                 public void onClosed(WebSocket webSocket, int code, String reason) {
-                    Log.d("WebSocket", "WebSocket closed: " + reason);
+                    Log.d("WebSocket", "WebSocket closed. Code: " + code + ", Reason: " + reason);
                 }
             });
 
         } catch (URISyntaxException e) {
-            Log.e("ChatRoomActivity", "WebSocket URI 생성 중 오류 발생: " + e.getMessage());
+            Log.e("ChatRoomActivity", "Error creating WebSocket URI: " + e.getMessage(), e);
         }
     }
-
-    private void sendJoinMessage() {
-        if (webSocket != null) {
-            JSONObject joinMessage = new JSONObject();
-            try {
-                // 채팅방 참여 메시지의 내용은 null 또는 빈 문자열로 설정
-                joinMessage.put("chatRoomId", chatRoomId);
-                joinMessage.put("senderId", currentUserId); // 현재 사용자 아이디 추가
-                joinMessage.put("message", ""); // 참여 메시지의 내용은 빈 문자열로 설정
-                joinMessage.put("messageType", "JOIN"); // 메시지 타입을 JOIN으로 설정
-
-                Log.d("ChatRoomActivity", "채팅방 참여 메시지: " + joinMessage.toString()); // 로그 추가
-                webSocket.send(joinMessage.toString());
-                Log.d("ChatRoomActivity", "채팅방 참여 메시지 전송: " + chatRoomId);
-            } catch (JSONException e) {
-                Log.e("ChatRoomActivity", "참여 메시지 생성 오류: " + e.getMessage());
-            }
-        }
-    }
-
 
     private void sendMessage() {
         String messageText = messageInput.getText().toString();
 
-        // 빈 메시지 확인
-        if (messageText == null || messageText.trim().isEmpty()) {
-            Log.e("Chat", "빈 메시지는 전송할 수 없습니다.");
+        if (messageText.trim().isEmpty()) {
+            Log.e("Chat", "Cannot send empty message.");
             return;
         }
 
-        // 메시지 객체 생성
+        // Create a new ChatMessage object
         ChatMessage message = new ChatMessage();
-        message.setChatRoomId(chatRoomId);        // 채팅방 아이디
-        message.setMessage(messageText);          // 메시지 내용
-        message.setMessageType(MessageType.TALK); // 메시지 타입 설정
-        message.setSenderId(currentUserId);      // 현재 사용자 아이디 추가
+        message.setChatRoomId(chatRoomId);
+        message.setMessage(messageText);
+        message.setMessageType("TALK"); // You can change this to any other message type you need
+        message.setSenderId(currentUserId);
 
-        Log.d("Chat", "Sending message: " + message.toString()); // 로그 추가
+        // Send the message to WebSocket
         sendMessageToWebSocket(message);
     }
 
-    // WebSocket 메시지 전송 메서드
     private void sendMessageToWebSocket(ChatMessage message) {
         try {
             JSONObject jsonMessage = new JSONObject();
             jsonMessage.put("chatRoomId", message.getChatRoomId());
             jsonMessage.put("message", message.getMessage());
             jsonMessage.put("messageType", message.getMessageType());
-            jsonMessage.put("senderId", message.getSenderId()); // senderId 추가
+            jsonMessage.put("senderId", message.getSenderId());
 
-            Log.d("Chat", "Sending message JSON: " + jsonMessage.toString()); // 로그 추가
             if (webSocket != null) {
                 webSocket.send(jsonMessage.toString());
-                Log.d("Chat", "메시지 전송 성공: " + jsonMessage.toString());
-                messageInput.setText(""); // 입력 필드 초기화
+                messageInput.setText(""); // Clear input field
             } else {
-                Log.e("Chat", "WebSocket이 연결되지 않았습니다.");
+                Log.e("WebSocket", "WebSocket is not connected.");
             }
         } catch (JSONException e) {
-            Log.e("Chat", "메시지 JSON 생성 오류: " + e.getMessage());
+            Log.e("WebSocket", "Error creating JSON for message: " + e.getMessage(), e);
+        }
+    }
+
+    private void handleWebSocketMessage(String text) {
+        try {
+            if (isJsonValid(text)) {
+                JSONObject jsonMessage = new JSONObject(text);
+                String senderName = jsonMessage.getString("senderName");
+                String message = jsonMessage.getString("message");
+                String time = getCurrentTime();
+                Long senderId = jsonMessage.getLong("senderId");
+
+                runOnUiThread(() -> {
+                    // 새 메시지를 추가
+                    chatRoomAdapter.addMessage(senderId, senderName, message, time);
+
+                    // RecyclerView의 마지막 항목으로 자동 스크롤
+                    chatRecyclerView.scrollToPosition(chatRoomAdapter.getItemCount() - 1);
+                });
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, "서버 메시지: " + text, Toast.LENGTH_SHORT).show());
+            }
+        } catch (JSONException e) {
+            Log.e("WebSocket", "JSON 파싱 오류: " + e.getMessage(), e);
+        }
+    }
+
+    private boolean isJsonValid(String text) {
+        try {
+            new JSONObject(text);
+            return true;
+        } catch (JSONException ex) {
+            return false;
         }
     }
 
